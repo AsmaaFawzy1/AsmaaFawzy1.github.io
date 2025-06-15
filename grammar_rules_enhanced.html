@@ -1,0 +1,312 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القواعد النحوية التأسيسية للصف الابتدائي</title>
+    <style>
+        body {
+            font-family: 'Amiri', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 5em;
+            color: rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 2;
+        }
+        h1 {
+            text-align: center;
+            color: #1a237e;
+            font-size: 2.8em;
+            margin-bottom: 30px;
+            animation: slideIn 1s ease-in;
+        }
+        h2 {
+            color: #d81b60;
+            font-size: 1.8em;
+            cursor: pointer;
+            padding: 10px;
+            background: #fce4ec;
+            border-radius: 10px;
+            margin: 20px 0;
+            transition: background 0.3s;
+        }
+        h2:hover {
+            background: #f06292;
+            color: white;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        table.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #b0bec5;
+        }
+        th {
+            background: #0288d1;
+            color: white;
+            font-size: 1.2em;
+        }
+        tr:nth-child(even) {
+            background: #e1f5fe;
+        }
+        tr:hover {
+            background: #b3e5fc;
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+        .example {
+            font-size: 1.1em;
+            color: #37474f;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            border-left: 5px solid #0288d1;
+        }
+        .section {
+            display: none;
+            transition: all 0.5s ease;
+        }
+        .section.active {
+            display: block;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            th, td {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+            .watermark {
+                font-size: 3em;
+            }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @font-face {
+            font-family: 'Amiri';
+            src: url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark">أ. أسماء فوزي</div>
+    <div class="container">
+        <h1>القواعد النحوية التأسيسية للصف الابتدائي</h1>
+
+        <h2 onclick="toggleSection('parts-of-speech')">أقسام الكلام</h2>
+        <div id="parts-of-speech" class="section">
+            <table>
+                <tr>
+                    <th>النوعية</th>
+                    <th>التعريف</th>
+                    <th>أمثلة</th>
+                </tr>
+                <tr>
+                    <td>الاسم</td>
+                    <td>كلمة تدل على إنسان أو حيوان أو نبات أو جماد</td>
+                    <td>محمد، قطة، شجرة، كتاب</td>
+                </tr>
+                <tr>
+                    <td>الفعل</td>
+                    <td>كلمة تدل على حدث مرتبط بزمن</td>
+                    <td>كتب، يلعب، ذهب</td>
+                </tr>
+                <tr>
+                    <td>الحرف</td>
+                    <td>كلمة تدل على معنى في غيرها</td>
+                    <td>في، على، من</td>
+                </tr>
+            </table>
+            <div class="example">مثال: محمد (اسم) يلعب (فعل) في (حرف) الحديقة.</div>
+        </div>
+
+        <h2 onclick="toggleSection('singular-plural')">الجمع والمفرد</h2>
+        <div id="singular-plural" class="section">
+            <table>
+                <tr>
+                    <th>النوع</th>
+                    <th>مفرد</th>
+                    <th>جمع</th>
+                </tr>
+                <tr>
+                    <td>إنسان</td>
+                    <td>طالب</td>
+                    <td>طلاب</td>
+                </tr>
+                <tr>
+                    <td>حيوان</td>
+                    <td>قط</td>
+                    <td>قطط</td>
+                </tr>
+                <tr>
+                    <td>جماد</td>
+                    <td>قلم</td>
+                    <td>أقلام</td>
+                </tr>
+            </table>
+            <div class="example">مثال: القلم (مفرد) على الطاولة، الأقلام (جمع) في الحقيبة.</div>
+        </div>
+
+        <h2 onclick="toggleSection('gender')">المذكر والمؤنث</h2>
+        <div id="gender" class="section">
+            <table>
+                <tr>
+                    <th>النوع</th>
+                    <th>مذكر</th>
+                    <th>مؤنث</th>
+                </tr>
+                <tr>
+                    <td>إنسان</td>
+                    <td>معلم</td>
+                    <td>معلمة</td>
+                </tr>
+                <tr>
+                    <td>حيوان</td>
+                    <td>ديك</td>
+                    <td>دجاجة</td>
+                </tr>
+                <tr>
+                    <td>جماد</td>
+                    <td>قمر</td>
+                    <td>شمس</td>
+                </tr>
+            </table>
+            <div class="example">مثال: المعلم (مذكر) يشرح، المعلمة (مؤنث) تكتب.</div>
+        </div>
+
+        <h2 onclick="toggleSection('sentence-types')">الجملة الاسمية والفعلية</h2>
+        <div id="sentence-types" class="section">
+            <table>
+                <tr>
+                    <th>النوع</th>
+                    <th>التعريف</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>الجملة الاسمية</td>
+                    <td>تبدأ باسم وتتكون من مبتدأ وخبر</td>
+                    <td>اليوم مشمس</td>
+                </tr>
+                <tr>
+                    <td>الجملة الفعلية</td>
+                    <td>تبدأ بفعل وتتكون من فعل وفاعل</td>
+                    <td>كتب محمد الدرس</td>
+                </tr>
+            </table>
+            <div class="example">مثال: السماء (اسمية) زرقاء، يلعب الأطفال (فعلية).</div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sections
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            const isActive = section.classList.contains('active');
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+            if (!isActive) {
+                section.classList.add('active');
+            }
+        }
+
+        // Animation for tables
+        const tables = document.querySelectorAll('table');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        tables.forEach(table => observer.observe(table));
+
+        // Add click event for table rows
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', function() {
+                this.style.backgroundColor = '#81d4fa';
+                setTimeout(() => this.style.backgroundColor = '', 500);
+            });
+        });
+
+        // Show first section by default
+        document.getElementById('parts-of-speech').classList.add('active');
+    </script>
+</body>
+</html>
