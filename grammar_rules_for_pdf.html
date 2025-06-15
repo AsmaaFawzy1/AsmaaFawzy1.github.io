@@ -1,0 +1,424 @@
+<script type="text/javascript">
+    var gk_isXlsx = false;
+    var gk_xlsxFileLookup = {};
+    var gk_fileData = {};
+    function filledCell(cell) {
+        return cell !== '' && cell != null;
+    }
+    function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                    row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                    headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+    }
+</script>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القواعد النحوية التأسيسية للمرحلة الابتدائية</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 100px;
+            color: rgba(0, 0, 0, 1);
+            z-index: -1;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 22px;
+            color: #1a237e;
+            margin-top: 30px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #e3f2fd;
+        }
+
+        .example {
+            font-style: italic;
+            color: #37474f;
+            margin: 10px 0;
+        }
+
+        .questions {
+            margin-top: 20px;
+        }
+
+        @media print {
+            .watermark {
+                color: rgba(0, 0, 0, 0.1) !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="watermark">أ. أسماء فوزي</div>
+    <h1>القواعد النحوية التأسيسية للمرحلة الابتدائية</h1>
+
+    <h2>1. الجملة وأنواعها</h2>
+    <p><strong>القاعدة:</strong> الجملة نوعان: جملة اسمية تبدأ باسم، وجملة فعلية تبدأ بفعل.</p>
+    <p><strong>الشرح:</strong> الجملة الاسمية تصف شيئًا، والجملة الفعلية تتحدث عن حدث.</p>
+    <table>
+        <tr>
+            <th>النوع</th>
+            <th>التعريف</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>جملة اسمية</td>
+            <td>تبدأ باسم</td>
+            <td>الولدُ نشيطٌ</td>
+        </tr>
+        <tr>
+            <td>جملة فعلية</td>
+            <td>تبدأ بفعل</td>
+            <td>ذهبَ الولدُ إلى المدرسة</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. هل "اليوم مشمس" جملة اسمية أم فعلية؟ 2. اكتب جملة فعلية من إبداعك.
+    </p>
+
+    <h2>2. الفعل وأنواعه</h2>
+    <p><strong>القاعدة:</strong> الفعل ثلاثة أنواع: ماضٍ، مضارع، أمر.</p>
+    <p><strong>الشرح:</strong> الماضي لما حدث، المضارع لما يحدث الآن أو لاحقًا، والأمر لطلب فعل.</p>
+    <table>
+        <tr>
+            <th>النوع</th>
+            <th>التعريف</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>ماضٍ</td>
+            <td>حدث في الماضي</td>
+            <td>كتبَ</td>
+        </tr>
+        <tr>
+            <td>مضارع</td>
+            <td>يحدث الآن أو لاحقًا</td>
+            <td>يكتبُ</td>
+        </tr>
+        <tr>
+            <td>أمر</td>
+            <td>طلب فعل</td>
+            <td>اكتبْ</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما نوع الفعل في "يدرسُ"؟ 2. حول "لعبَ" إلى مضارع.</p>
+
+    <h2>3. الاسم وأنواعه</h2>
+    <p><strong>القاعدة:</strong> الاسم ثلاثة أنواع: مفرد، مثنى، جمع.</p>
+    <p><strong>الشرح:</strong> المفرد لشيء واحد، المثنى لاثنين، والجمع لأكثر من اثنين.</p>
+    <table>
+        <tr>
+            <th>النوع</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>مفرد</td>
+            <td>ولد</td>
+        </tr>
+        <tr>
+            <td>مثنى</td>
+            <td>ولدان</td>
+        </tr>
+        <tr>
+            <td>جمع</td>
+            <td>أولاد</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما الفرق بين "كتاب" و"كتابان"؟ 2. اكتب جمع "قلم".</p>
+
+    <h2>4. علامات الإعراب الأصلية</h2>
+    <p><strong>القاعدة:</strong> الضمة للرفع، الفتحة للنصب، الكسرة للجر، السكون للجزم.</p>
+    <p><strong>الشرح:</strong> هذه العلامات تظهر على آخر الكلمة لتوضيح دورها في الجملة.</p>
+    <table>
+        <tr>
+            <th>العلامة</th>
+            <th>الحالة</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>الضمة</td>
+            <td>رفع</td>
+            <td>الولدُ ناجحٌ</td>
+        </tr>
+        <tr>
+            <td>الفتحة</td>
+            <td>نصب</td>
+            <td>رأيتُ الولدَ</td>
+        </tr>
+        <tr>
+            <td>الكسرة</td>
+            <td>جر</td>
+            <td>ذهبتُ إلى الولدِ</td>
+        </tr>
+        <tr>
+            <td>السكون</td>
+            <td>جزم</td>
+            <td>لم يذهبْ</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما علامة إعراب "الكتابِ"؟ 2. اكتب جملة تحتوي على اسم مرفوع.</p>
+
+    <h2>5. المبتدأ والخبر</h2>
+    <p><strong>القاعدة:</strong> المبتدأ اسم يبدأ الجملة الاسمية، والخبر يخبر عنه.</p>
+    <p><strong>الشرح:</strong> المبتدأ موضوع الجملة، والخبر يصف هذا الموضوع.</p>
+    <table>
+        <tr>
+            <th>الجزء</th>
+            <th>التعريف</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>المبتدأ</td>
+            <td>اسم يبدأ الجملة</td>
+            <td>الشمسُ</td>
+        </tr>
+        <tr>
+            <td>الخبر</td>
+            <td>يصف المبتدأ</td>
+            <td>مشرقةٌ</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما المبتدأ في "اليوم مشمس"؟ 2. اكتب جملة اسمية.</p>
+
+    <h2>6. كان وأخواتها</h2>
+    <p><strong>القاعدة:</strong> ترفع المبتدأ (يسمى اسمها) وتنصب الخبر (يسمى خبرها).</p>
+    <p><strong>الشرح:</strong> هذه الأفعال تغير إعراب الجملة الاسمية.</p>
+    <table>
+        <tr>
+            <th>الفعل</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>كان</td>
+            <td>كان الجوُّ جميلًا</td>
+        </tr>
+        <tr>
+            <td>أصبح</td>
+            <td>أصبح الطالبُ ناجحًا</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما اسم "كان" في "كان اليومُ مشمسًا"؟ 2. اكتب جملة باستخدام "أصبح".
+    </p>
+
+    <h2>7. إن وأخواتها</h2>
+    <p><strong>القاعدة:</strong> تنصب المبتدأ (يسمى اسمها) وترفع الخبر (يسمى خبرها).</p>
+    <p><strong>الشرح:</strong> هذه الأدوات تضيف تأكيدًا أو تمنيًا للجملة.</p>
+    <table>
+        <tr>
+            <th>الأداة</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>إن</td>
+            <td>إنَّ العلمَ نورٌ</td>
+        </tr>
+        <tr>
+            <td>ليت</td>
+            <td>ليت اليومَ عطلةٌ</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما خبر "إن" في "إن الطالبَ مجتهدٌ"؟ 2. اكتب جملة باستخدام "لعل".</p>
+
+    <h2>8. الفاعل</h2>
+    <p><strong>القاعدة:</strong> اسم مرفوع يدل على من قام بالفعل.</p>
+    <p><strong>الشرح:</strong> الفاعل هو من يقوم بالعمل في الجملة الفعلية.</p>
+    <table>
+        <tr>
+            <th>الجزء</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>فاعل</td>
+            <td>كتبَ الطالبُ الدرسَ</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. من الفاعل في "لعبَ الأولادُ"؟ 2. اكتب جملة تحتوي على فاعل.</p>
+
+    <h2>9. المفعول به</h2>
+    <p><strong>القاعدة:</strong> اسم منصوب يدل على من وقع عليه الفعل.</p>
+    <p><strong>الشرح:</strong> المفعول به هو ما تأثر بالفعل.</p>
+    <table>
+        <tr>
+            <th>الجزء</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>مفعول به</td>
+            <td>أكلَ الولدُ التفاحةَ</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما المفعول به في "كتبَ الطالبُ الواجبَ"؟ 2. اكتب جملة تحتوي على
+        مفعول به.</p>
+
+    <h2>10. الحال</h2>
+    <p><strong>القاعدة:</strong> اسم منصوب يبين هيئة الفاعل أو المفعول به.</p>
+    <p><strong>الشرح:</strong> الحال يصف كيف كان الفاعل أو المفعول أثناء الفعل.</p>
+    <table>
+        <tr>
+            <th>الجزء</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>حال</td>
+            <td>عاد الطالبُ سعيدًا</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما الحال في "جاء الولدُ مبتسمًا"؟ 2. اكتب جملة تحتوي على حال.</p>
+
+    <h2>11. النعت (الصفة)</h2>
+    <p><strong>القاعدة:</strong> يتبع الاسم الموصوف في الإعراب.</p>
+    <p><strong>الشرح:</strong> النعت يصف الاسم الذي قبله ويأخذ نفس إعرابه.</p>
+    <table>
+        <tr>
+            <th>الجزء</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>نعت</td>
+            <td>قرأتُ كتابًا مفيدًا</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما النعت في "رأيتُ طالبًا مجتهدًا"؟ 2. اكتب جملة تحتوي على نعت.</p>
+
+    <h2>12. حرف الجر</h2>
+    <p><strong>القاعدة:</strong> يدخل على الاسم فيجرّه.</p>
+    <p><strong>الشرح:</strong> حروف الجر تجعل الاسم بعدها مجرورًا.</p>
+    <table>
+        <tr>
+            <th>حرف الجر</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>إلى</td>
+            <td>ذهبتُ إلى المدرسةِ</td>
+        </tr>
+        <tr>
+            <td>في</td>
+            <td>الكتابُ في الحقيبةِ</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما حرف الجر في "جلستُ على الكرسيِ"؟ 2. اكتب جملة تحتوي على حرف جر.
+    </p>
+
+    <h2>13. المضاف والمضاف إليه</h2>
+    <p><strong>القاعدة:</strong> المضاف لا يحمل "أل"، والمضاف إليه غالبًا مجرور.</p>
+    <p><strong>الشرح:</strong> المضاف يرتبط بالمضاف إليه ليكمل معناه.</p>
+    <table>
+        <tr>
+            <th>الجزء</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>مضاف ومضاف إليه</td>
+            <td>كتابُ الطالبِ</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما المضاف إليه في "قلمُ المعلمِ"؟ 2. اكتب جملة تحتوي على مضاف ومضاف
+        إليه.</p>
+
+    <h2>14. التمييز</h2>
+    <p><strong>القاعدة:</strong> اسم نكرة منصوب يوضح اسمًا مبهمًا قبله.</p>
+    <p><strong>الشرح:</strong> التمييز يزيل الغموض عن الكلمة السابقة.</p>
+    <table>
+        <tr>
+            <th>الجزء</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>تمييز</td>
+            <td>اشتريتُ كيلو تفاحًا</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما التمييز في "اشتريتُ لتر ماءً"؟ 2. اكتب جملة تحتوي على تمييز.</p>
+
+    <h2>15. الاستفهام</h2>
+    <p><strong>القاعدة:</strong> أداة للسؤال مثل: من، ماذا، أين، متى، كيف، كم، هل، أ.</p>
+    <p><strong>الشرح:</strong> أدوات الاستفهام تُستخدم لبناء الأسئلة.</p>
+    <table>
+        <tr>
+            <th>أداة الاستفهام</th>
+            <th>مثال</th>
+        </tr>
+        <tr>
+            <td>من</td>
+            <td>من جاء؟</td>
+        </tr>
+        <tr>
+            <td>هل</td>
+            <td>هل قرأت الكتاب؟</td>
+        </tr>
+    </table>
+    <p class="questions"><strong>أسئلة:</strong> 1. ما أداة الاستفهام في "أين الكتاب؟"؟ 2. اكتب سؤالًا باستخدام "كيف".
+    </p>
+
+</body>
+
+</html>
