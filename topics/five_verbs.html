@@ -1,0 +1,247 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأفعال الخمسة - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">الأفعال الخمسة</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">الأفعال الخمسة هي أفعال مضارعة تنتهي بحرف من حروف الضمائر (الواو، الألف، الياء)، مثل: يفعلون، تفعلان، تفعلين.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">الأفعال الخمسة هي أفعال مضارعة متصلة بضمائر معينة (جمع المذكر، المثنى، المخاطبة المؤنثة)، وتُعرب بطريقة خاصة عند دخول أدوات النصب أو الجزم عليها. تشمل: يفعلون، يفعلان، تفعلون، تفعلان، تفعلين. تتميز هذه الأفعال بإعرابها بحذف النون في النصب والجزم.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع الأفعال الخمسة:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>يفعلون: جمع المذكر الغائب، مثل "يدرسون".</li>
+                        <li>يفعلان: مثنى المذكر الغائب، مثل "يدرسان".</li>
+                        <li>تفعلون: جمع المذكر أو المؤنث المخاطب، مثل "تدرسون".</li>
+                        <li>تفعلان: مثنى المخاطب، مثل "تدرسان".</li>
+                        <li>تفعلين: المؤنثة المخاطبة، مثل "تدرسین".</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>رفع: بالنون، مثل "يدرسونَ".</li>
+                        <li>نصب: بحذف النون، مثل "لن يدرسوا".</li>
+                        <li>جزم: بحذف النون، مثل "لم يدرسوا".</li>
+                    </ul>
+                </li>
+                <li><strong>شروط الإعراب:</strong> يجب أن تكون متصلة بضمير من الضمائر المذكورة.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: الأفعال الخمسة</h3>
+            <table>
+                <tr>
+                    <th>الفعل</th>
+                    <th>الضمير</th>
+                    <th>الرفع</th>
+                    <th>النصب/الجزم</th>
+                </tr>
+                <tr>
+                    <td>يفعلون</td>
+                    <td>جمع المذكر الغائب</td>
+                    <td>يدرسونَ</td>
+                    <td>يدرسوا</td>
+                </tr>
+                <tr>
+                    <td>يفعلان</td>
+                    <td>مثنى المذكر الغائب</td>
+                    <td>يدرسانِ</td>
+                    <td>يدرسا</td>
+                </tr>
+                <tr>
+                    <td>تفعلون</td>
+                    <td>جمع المخاطب</td>
+                    <td>تدرسونَ</td>
+                    <td>تدرسوا</td>
+                </tr>
+                <tr>
+                    <td>تفعلان</td>
+                    <td>مثنى المخاطب</td>
+                    <td>تدرسانِ</td>
+                    <td>تدرسا</td>
+                </tr>
+                <tr>
+                    <td>تفعلين</td>
+                    <td>المؤنثة المخاطبة</td>
+                    <td>تدرسینَ</td>
+                    <td>تدرسي</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الفعل</th>
+                    <th>الضمير</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>يدرسونَ الدروسَ</td>
+                    <td>يدرسونَ</td>
+                    <td>جمع المذكر الغائب</td>
+                    <td>مرفوع بالنون</td>
+                    <td>فعل مضارع</td>
+                </tr>
+                <tr>
+                    <td>لن يدرسوا الدروسَ</td>
+                    <td>يدرسوا</td>
+                    <td>جمع المذكر الغائب</td>
+                    <td>منصوب بحذف النون</td>
+                    <td>تأثر بأداة نصب</td>
+                </tr>
+                <tr>
+                    <td>لم يدرسا</td>
+                    <td>يدرسا</td>
+                    <td>مثنى المذكر الغائب</td>
+                    <td>مجزوم بحذف النون</td>
+                    <td>تأثر بأداة جزم</td>
+                </tr>
+                <tr>
+                    <td>تدرسونَ بجدٍ</td>
+                    <td>تدرسونَ</td>
+                    <td>جمع المخاطب</td>
+                    <td>مرفوع بالنون</td>
+                    <td>فعل مضارع</td>
+                </tr>
+                <tr>
+                    <td>لن تدرسي الدرسَ</td>
+                    <td>تدرسي</td>
+                    <td>المؤنثة المخاطبة</td>
+                    <td>منصوب بحذف النون</td>
+                    <td>تأثر بأداة نصب</td>
+                </tr>
+                <tr>
+                    <td>تدرسانِ باجتهادٍ</td>
+                    <td>تدرسانِ</td>
+                    <td>مثنى المخاطب</td>
+                    <td>مرفوع بالنون</td>
+                    <td>فعل مضارع</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما الفعل من الأفعال الخمسة في "يدرسونَ الدروسَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. يدرسانِ</li>
+                            <li>ب. يدرسونَ</li>
+                            <li>ج. تدرسینَ</li>
+                            <li>د. تدرسانِ</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. يدرسونَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف يُعرب الفعل في "لن تدرسي الدرسَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مرفوع بالنون</li>
+                            <li>ب. منصوب بحذف النون</li>
+                            <li>ج. مجزوم بالسكون</li>
+                            <li>د. مبني على الفتح</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. منصوب بحذف النون</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد الفعل والضمير في "تدرسونَ بجدٍ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الفعل: تدرسونَ، الضمير: جمع المخاطب</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على فعل من الأفعال الخمسة في حالة الجزم.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">لم يدرسوا</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما علامة الجزم في الأفعال الخمسة؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">حذف النون</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
