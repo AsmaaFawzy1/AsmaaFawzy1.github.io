@@ -1,0 +1,240 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أسلوب النداء - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">أسلوب النداء</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">أسلوب النداء هو أسلوب لغوي يُستخدم لمناداة شخص أو شيء، يبدأ بحرف نداء مثل "يا"، مثل: يا طالبُ!</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">أسلوب النداء يُستخدم للفت انتباه المنادى (شخص أو شيء) باستخدام حرف نداء مثل "يا"، "أيا"، أو "هيا". يتبع حرف النداء المنادى، وهو اسم يُعرب حسب نوعه وصيغته. المنادى قد يكون مفردًا، معرفة، نكرة، أو مضافًا، ولكل حالة قواعد إعرابية محددة.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>حروف النداء:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>يا:</strong> الأكثر شيوعًا، للقريب والبعيد، مثل "يا طالبُ!".</li>
+                        <li><strong>أيا، هيا:</strong> للبعيد، مثل "أيا طالبُ!".</li>
+                    </ul>
+                </li>
+                <li><strong>أنواع المنادى:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>مفرد معرفة:</strong> منصوب بحركة ظاهرة، مثل "يا محمدَ!".</li>
+                        <li><strong>نكرة مقصودة:</strong> منصوب بحركة ظاهرة، مثل "يا طالبَ!".</li>
+                        <li><strong>نكرة غير مقصودة:</strong> منصوب بحركة مقدرة، مثل "يا رجلًا!".</li>
+                        <li><strong>مضاف:</strong> يتبع إعراب المضاف إليه، مثل "يا طالبَ العلمِ!".</li>
+                        <li><strong>شبيه بالمضاف:</strong> منصوب، مثل "يا حسنَ الخلقِ!".</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong> المنادى غالبًا منصوب، إلا في حالات خاصة (مثل المضاف).</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أنواع المنادى</h3>
+            <table>
+                <tr>
+                    <th>نوع المنادى</th>
+                    <th>الإعراب</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>مفرد معرفة</td>
+                    <td>منصوب بحركة ظاهرة</td>
+                    <td>يا محمدَ!</td>
+                </tr>
+                <tr>
+                    <td>نكرة مقصودة</td>
+                    <td>منصوب بحركة ظاهرة</td>
+                    <td>يا طالبَ!</td>
+                </tr>
+                <tr>
+                    <td>نكرة غير مقصودة</td>
+                    <td>منصوب بحركة مقدرة</td>
+                    <td>يا رجلًا!</td>
+                </tr>
+                <tr>
+                    <td>مضاف</td>
+                    <td>يتبع إعراب المضاف إليه</td>
+                    <td>يا طالبَ العلمِ!</td>
+                </tr>
+                <tr>
+                    <td>شبيه بالمضاف</td>
+                    <td>منصوب</td>
+                    <td>يا حسنَ الخلقِ!</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>حرف النداء</th>
+                    <th>المنادى</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>يا محمدَ!</td>
+                    <td>يا</td>
+                    <td>محمدَ</td>
+                    <td>منادى منصوب بحركة ظاهرة</td>
+                    <td>مفرد معرفة</td>
+                </tr>
+                <tr>
+                    <td>يا طالبَ!</td>
+                    <td>يا</td>
+                    <td>طالبَ</td>
+                    <td>منادى منصوب بحركة ظاهرة</td>
+                    <td>نكرة مقصودة</td>
+                </tr>
+                <tr>
+                    <td>يا رجلًا!</td>
+                    <td>يا</td>
+                    <td>رجلًا</td>
+                    <td>منادى منصوب بحركة مقدرة</td>
+                    <td>نكرة غير مقصودة</td>
+                </tr>
+                <tr>
+                    <td>يا طالبَ العلمِ!</td>
+                    <td>يا</td>
+                    <td>طالبَ العلمِ</td>
+                    <td>منادى منصوب، مضاف إليه مجرور</td>
+                    <td>مضاف</td>
+                </tr>
+                <tr>
+                    <td>يا حسنَ الخلقِ!</td>
+                    <td>يا</td>
+                    <td>حسنَ الخلقِ</td>
+                    <td>منادى منصوب، مضاف إليه مجرور</td>
+                    <td>شبيه بالمضاف</td>
+                </tr>
+                <tr>
+                    <td>أيا طالبُ!</td>
+                    <td>أيا</td>
+                    <td>طالبُ</td>
+                    <td>منادى منصوب بحركة ظاهرة</td>
+                    <td>حرف نداء للبعيد</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما حرف النداء في "يا طالبَ!"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. أيا</li>
+                            <li>ب. يا</li>
+                            <li>ج. هيا</li>
+                            <li>د. لا يوجد</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. يا</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف تُعرب "محمدَ" في "يا محمدَ!"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. منادى منصوب بحركة ظاهرة</li>
+                            <li>ب. منادى مرفوع</li>
+                            <li>ج. مفعول به منصوب</li>
+                            <li>د. مبتدأ مرفوع</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أ. منادى منصوب بحركة ظاهرة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد حرف النداء والمنادى في "يا طالبَ العلمِ!".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">حرف النداء: يا، المنادى: طالبَ العلمِ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة نداء تحتوي على منادى نكرة مقصودة.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">يا طالبَ!</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما الفرق بين المنادى النكرة المقصودة وغير المقصودة؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">النكرة المقصودة منصوبة بحركة ظاهرة، والنكرة غير المقصودة منصوبة بحركة مقدرة</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
