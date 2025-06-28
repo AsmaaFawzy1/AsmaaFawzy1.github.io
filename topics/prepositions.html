@@ -1,0 +1,238 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حروف الجر - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">حروف الجر</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">حروف الجر هي حروف تُستخدم لربط الأسماء بما بعدها، وتجعل الاسم بعدها مجرورًا، مثل: في، على، إلى، من، عن.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">حروف الجر هي حروف مبنية تُستخدم للربط بين الأسماء والجمل، وتُؤثر على إعراب الاسم الذي يتبعها بجعله مجرورًا. تُستخدم للدلالة على معانٍ مختلفة مثل المكان، الزمان، السبب، أو الغرض. الحروف الأساسية للجر شائعة في اللغة العربية، ويجب حفظها لفهم بنية الجمل.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أمثلة حروف الجر:</strong> من، إلى، عن، على، في، الباء، اللام، كاف التشبيه، واو القسم، تا القسم.</li>
+                <li><strong>المعاني:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>المكان:</strong> مثل "في البيتِ"، "على الطاولةِ".</li>
+                        <li><strong>الزمان:</strong> مثل "من الصباحِ".</li>
+                        <li><strong>السبب أو الغرض:</strong> مثل "للدراسةِ"، "عن الكتابِ".</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong> الاسم الذي يلي حرف الجر يكون مجرورًا، ويُشكل مع حرف الجر "جار ومجرور" في محل رفع (خبر)، نصب (حال، مفعول به)، أو جر (مضاف إليه).</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: حروف الجر</h3>
+            <table>
+                <tr>
+                    <th>حرف الجر</th>
+                    <th>المعنى</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>في</td>
+                    <td>الظرفية (مكان/زمان)</td>
+                    <td>في البيتِ</td>
+                </tr>
+                <tr>
+                    <td>على</td>
+                    <td>الاستعلاء</td>
+                    <td>على الجبلِ</td>
+                </tr>
+                <tr>
+                    <td>إلى</td>
+                    <td>الانتهاء</td>
+                    <td>إلى المدرسةِ</td>
+                </tr>
+                <tr>
+                    <td>من</td>
+                    <td>الابتداء</td>
+                    <td>من المكتبةِ</td>
+                </tr>
+                <tr>
+                    <td>عن</td>
+                    <td>الابتعاد</td>
+                    <td>عن الخطرِ</td>
+                </tr>
+                <tr>
+                    <td>الباء</td>
+                    <td>السببية/الملابسة</td>
+                    <td>بالقلمِ</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>حرف الجر</th>
+                    <th>الاسم المجرور</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>الكتابُ في الحقيبةِ</td>
+                    <td>في</td>
+                    <td>الحقيبةِ</td>
+                    <td>في محل رفع (خبر)</td>
+                    <td>جار ومجرور كخبر</td>
+                </tr>
+                <tr>
+                    <td>ذهبتُ إلى السوقِ</td>
+                    <td>إلى</td>
+                    <td>السوقِ</td>
+                    <td>في محل نصب (مفعول به)</td>
+                    <td>مفعول به في جملة فعلية</td>
+                </tr>
+                <tr>
+                    <td>كتبتُ بالقلمِ</td>
+                    <td>الباء</td>
+                    <td>القلمِ</td>
+                    <td>في محل نصب (مفعول به)</td>
+                    <td>مفعول به يدل على الأداة</td>
+                </tr>
+                <tr>
+                    <td>خرجتُ من البيتِ</td>
+                    <td>من</td>
+                    <td>البيتِ</td>
+                    <td>في محل نصب (مفعول به)</td>
+                    <td>يدل على نقطة البداية</td>
+                </tr>
+                <tr>
+                    <td>الطالبُ على المقعدِ</td>
+                    <td>على</td>
+                    <td>المقعدِ</td>
+                    <td>في محل رفع (خبر)</td>
+                    <td>جار ومجرور كخبر</td>
+                </tr>
+                <tr>
+                    <td>تحدثتُ عن الكتابِ</td>
+                    <td>عن</td>
+                    <td>الكتابِ</td>
+                    <td>في محل نصب (مفعول به)</td>
+                    <td>يدل على الموضوع</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما حرف الجر في "ذهبتُ إلى المدرسةِ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. في</li>
+                            <li>ب. إلى</li>
+                            <li>ج. على</li>
+                            <li>د. من</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. إلى</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف تُعرب "في الحديقةِ" في "لعبتُ في الحديقةِ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. في محل رفع (خبر)</li>
+                            <li>ب. في محل نصب (مفعول به)</li>
+                            <li>ج. في محل نصب (حال)</li>
+                            <li>د. في محل جر (مضاف إليه)</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. في محل نصب (مفعول به)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد حرف الجر والاسم المجرور في "الكتابُ على الطاولةِ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">حرف الجر: على، الاسم المجرور: الطاولةِ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على حرف جر يدل على الظرفية.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الطلابُ في الفصلِ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما المعنى الذي يدل عليه حرف الجر "عن" في "تحدثتُ عن الكتابِ"؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">يدل على الموضوع</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
