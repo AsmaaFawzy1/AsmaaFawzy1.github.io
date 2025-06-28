@@ -1,0 +1,244 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأسماء الخمسة - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">الأسماء الخمسة</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">الأسماء الخمسة هي أسماء تُعرب بحروف بدلاً من الحركات في حالات الرفع والنصب والجر، وهي: أب، أخ، حم، فو، ذو.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">الأسماء الخمسة هي أسماء معرفة تُستخدم للدلالة على أشخاص أو صفات معينة، وتتميز بإعرابها بحروف بدلاً من الحركات عندما تكون مفردة ومضافة إلى غير ياء المتكلم. تشمل هذه الأسماء: أب (الوالد)، أخ (الأخ)، حم (الصهر)، فو (الفم)، وذو (صاحب الصفة). إذا أُضيفت إلى ياء المتكلم (مثل أبي)، تُعرب بحركات عادية.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>علامات الإعراب:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>الرفع:</strong> بالواو، مثل "أبوكَ".</li>
+                        <li><strong>النصب:</strong> بالألف، مثل "رأيتُ أباكَ".</li>
+                        <li><strong>الجر:</strong> بالياء، مثل "مررتُ بأبيكَ".</li>
+                    </ul>
+                </li>
+                <li><strong>شروط الإعراب بالحروف:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>أن تكون مفردة (غير مثنى أو جمع).</li>
+                        <li>أن تكون مضافة إلى غير ياء المتكلم.</li>
+                    </ul>
+                </li>
+                <li><strong>الاستخدام:</strong> تُستخدم في الجمل الاسمية أو الفعلية، وغالبًا تكون معرفة.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: الأسماء الخمسة</h3>
+            <table>
+                <tr>
+                    <th>الاسم</th>
+                    <th>الرفع</th>
+                    <th>النصب</th>
+                    <th>الجر</th>
+                </tr>
+                <tr>
+                    <td>أب</td>
+                    <td>أبوكَ</td>
+                    <td>أباكَ</td>
+                    <td>بأبيكَ</td>
+                </tr>
+                <tr>
+                    <td>أخ</td>
+                    <td>أخوكَ</td>
+                    <td>أخاكَ</td>
+                    <td>بأخيكَ</td>
+                </tr>
+                <tr>
+                    <td>حم</td>
+                    <td>حموكَ</td>
+                    <td>حماكَ</td>
+                    <td>بحميكَ</td>
+                </tr>
+                <tr>
+                    <td>فو</td>
+                    <td>فوكَ</td>
+                    <td>فاكَ</td>
+                    <td>بفيكَ</td>
+                </tr>
+                <tr>
+                    <td>ذو</td>
+                    <td>ذوكَ</td>
+                    <td>ذاكَ</td>
+                    <td>بذيكَ</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الاسم</th>
+                    <th>الحالة</th>
+                    <th>العلامة</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>أبوكَ مجتهدٌ</td>
+                    <td>أبوكَ</td>
+                    <td>رفع</td>
+                    <td>الواو</td>
+                    <td>مفرد، مضاف لغير ياء المتكلم</td>
+                </tr>
+                <tr>
+                    <td>رأيتُ أباكَ</td>
+                    <td>أباكَ</td>
+                    <td>نصب</td>
+                    <td>الألف</td>
+                    <td>مفرد، مضاف لغير ياء المتكلم</td>
+                </tr>
+                <tr>
+                    <td>مررتُ بأبيكَ</td>
+                    <td>أبيكَ</td>
+                    <td>جر</td>
+                    <td>الياء</td>
+                    <td>مفرد، مضاف لغير ياء المتكلم</td>
+                </tr>
+                <tr>
+                    <td>أخوكَ يدرسُ</td>
+                    <td>أخوكَ</td>
+                    <td>رفع</td>
+                    <td>الواو</td>
+                    <td>مفرد، مضاف لغير ياء المتكلم</td>
+                </tr>
+                <tr>
+                    <td>ذوكَ العلمُ ناجحٌ</td>
+                    <td>ذوكَ</td>
+                    <td>رفع</td>
+                    <td>الواو</td>
+                    <td>مفرد، مضاف لغير ياء المتكلم</td>
+                </tr>
+                <tr>
+                    <td>أبي يعملُ</td>
+                    <td>أبي</td>
+                    <td>رفع</td>
+                    <td>الضمة المقدرة</td>
+                    <td>مضاف إلى ياء المتكلم</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما علامة الإعراب في "أباكَ" في "رأيتُ أباكَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. الواو</li>
+                            <li>ب. الألف</li>
+                            <li>ج. الياء</li>
+                            <li>د. الضمة</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. الألف</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ما الاسم من الأسماء الخمسة في "أخوكَ يدرسُ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. أب</li>
+                            <li>ب. أخ</li>
+                            <li>ج. حم</li>
+                            <li>د. فو</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. أخ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد الحالة الإعرابية وعلامتها في "مررتُ بأبيكَ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الحالة: جر، العلامة: الياء</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على اسم من الأسماء الخمسة في حالة الرفع.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أخوكَ مجتهدٌ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>لماذا تُعرب الأسماء الخمسة بحروف بدلاً من الحركات؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">لأنها مفردة ومضافة إلى غير ياء المتكلم</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>

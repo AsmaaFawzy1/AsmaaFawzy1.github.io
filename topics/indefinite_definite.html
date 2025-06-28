@@ -1,0 +1,246 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>النكرة والمعرفة - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">النكرة والمعرفة</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">النكرة هي الاسم الذي يدل على شيء غير محدد، مثل "كتابٌ"، والمعرفة هي الاسم الذي يدل على شيء محدد، مثل "الكتابُ".</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">النكرة والمعرفة هما نوعان رئيسيان للأسماء في اللغة العربية. النكرة تُستخدم للدلالة على شيء عام أو غير محدد، بينما المعرفة تُشير إلى شيء معين معروف. النكرة غالبًا تأخذ تنوينًا، بينما المعرفة تُعرف بأدوات مثل "ال" أو بكونها اسم عَلَم.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع النكرة:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>نكرة غير مقصودة: مثل "رجلٌ"، تشير إلى أي فرد دون تحديد.</li>
+                        <li>نكرة مقصودة: مثل "يا طالبَ!"، تشير إلى فرد معين في السياق.</li>
+                    </ul>
+                </li>
+                <li><strong>أنواع المعرفة:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>المعرف بـ"ال": مثل "الكتابُ".</li>
+                        <li>اسم العَلَم: مثل "محمدٌ".</li>
+                        <li>الضمير: مثل "هو".</li>
+                        <li>اسم الإشارة: مثل "هذا".</li>
+                        <li>اسم الموصول: مثل "الذي".</li>
+                        <li>المضاف إلى معرفة: مثل "كتابُ الطالبِ".</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong> النكرة تأخذ تنوينًا في الرفع (ٌ)، النصب (ً)، أو الجر (ٍ)، بينما المعرفة تُعرب بحركات ظاهرة أو مقدرة حسب نوعها.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: النكرة والمعرفة</h3>
+            <table>
+                <tr>
+                    <th>النوع</th>
+                    <th>الوصف</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>نكرة</td>
+                    <td>اسم غير محدد، غالبًا بتنوين</td>
+                    <td>كتابٌ</td>
+                </tr>
+                <tr>
+                    <td>معرفة بـ"ال"</td>
+                    <td>اسم محدد بـ"ال"</td>
+                    <td>الكتابُ</td>
+                </tr>
+                <tr>
+                    <td>اسم عَلَم</td>
+                    <td>اسم شخص أو مكان</td>
+                    <td>محمدٌ</td>
+                </tr>
+                <tr>
+                    <td>ضمير</td>
+                    <td>اسم يحل محل المعرفة</td>
+                    <td>هو</td>
+                </tr>
+                <tr>
+                    <td>اسم إشارة</td>
+                    <td>اسم يشير إلى معرفة</td>
+                    <td>هذا</td>
+                </tr>
+                <tr>
+                    <td>اسم موصول</td>
+                    <td>اسم يربط بجملة</td>
+                    <td>الذي</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الاسم</th>
+                    <th>النوع</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>كتابٌ على الطاولةِ</td>
+                    <td>كتابٌ</td>
+                    <td>نكرة</td>
+                    <td>مبتدأ مرفوع بالضمة</td>
+                    <td>اسم غير محدد</td>
+                </tr>
+                <tr>
+                    <td>الكتابُ جديدٌ</td>
+                    <td>الكتابُ</td>
+                    <td>معرفة بـ"ال"</td>
+                    <td>مبتدأ مرفوع بالضمة</td>
+                    <td>اسم محدد</td>
+                </tr>
+                <tr>
+                    <td>محمدٌ يدرسُ</td>
+                    <td>محمدٌ</td>
+                    <td>اسم عَلَم</td>
+                    <td>مبتدأ مرفوع بالضمة</td>
+                    <td>اسم شخص معين</td>
+                </tr>
+                <tr>
+                    <td>هو يقرأُ</td>
+                    <td>هو</td>
+                    <td>ضمير</td>
+                    <td>مبتدأ مرفوع</td>
+                    <td>يحل محل معرفة</td>
+                </tr>
+                <tr>
+                    <td>هذا طالبٌ</td>
+                    <td>هذا</td>
+                    <td>اسم إشارة</td>
+                    <td>مبتدأ مرفوع</td>
+                    <td>يشير إلى معرفة</td>
+                </tr>
+                <tr>
+                    <td>الذي يدرسُ ناجحٌ</td>
+                    <td>الذي</td>
+                    <td>اسم موصول</td>
+                    <td>مبتدأ مرفوع</td>
+                    <td>يربط بجملة</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع الاسم "كتابٌ" في "كتابٌ على الطاولةِ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. معرفة بـ"ال"</li>
+                            <li>ب. نكرة</li>
+                            <li>ج. اسم عَلَم</li>
+                            <li>د. ضمير</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. نكرة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع الاسم "هذا" في "هذا طالبٌ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. نكرة</li>
+                            <li>ب. اسم إشارة</li>
+                            <li>ج. اسم موصول</li>
+                            <li>د. اسم عَلَم</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. اسم إشارة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد نوع الاسم وإعرابه في "الكتابُ جديدٌ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">النوع: معرفة بـ"ال"، الإعراب: مبتدأ مرفوع بالضمة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على اسم معرفة بـ"ال".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الطالبُ مجتهدٌ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما الفرق بين النكرة والمعرفة؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">النكرة غير محددة وتأخذ تنوينًا، والمعرفة محددة ولا تأخذ تنوينًا غالبًا</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
