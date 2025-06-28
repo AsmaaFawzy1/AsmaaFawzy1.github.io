@@ -1,0 +1,253 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الضمائر - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">الضمائر</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">الضمائر هي أسماء معرفة تُستخدم بدلاً من الأسماء للإشارة إلى المتكلم، المخاطب، أو الغائب، مثل: أنا، أنتَ، هو، هي.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">الضمائر تُستخدم لتجنب تكرار الأسماء في الجمل، مما يجعل اللغة أكثر سلاسة. تنقسم الضمائر إلى ضمائر منفصلة (تُكتب مستقلة) وضمائر متصلة (تُلحق بالكلمات). تختلف الضمائر حسب الشخص (متكلم، مخاطب، غائب)، العدد (مفرد، مثنى، جمع)، والجنس (مذكر، مؤنث). تُعرب الضمائر حسب موقعها في الجملة، وقد تكون مبنية (لا تتغير حركتها) أو معربة.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>الضمائر المنفصلة:</strong> تُستخدم كمبتدأ أو خبر، مثل: أنا، أنتَ، هو، هي، نحن، أنتم، هم.</li>
+                <li><strong>الضمائر المتصلة:</strong> تُلحق بالأفعال، الأسماء، أو الحروف، مثل: -ني، -كَ، -هُ، -ها.</li>
+                <li><strong>الأنواع حسب الشخص:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>المتكلم:</strong> أنا، نحن.</li>
+                        <li><strong>المخاطب:</strong> أنتَ، أنتِ، أنتما، أنتم، أنتن.</li>
+                        <li><strong>الغائب:</strong> هو، هي، هما، هم، هن.</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong> الضمائر المنفصلة غالبًا مرفوعة (مبتدأ أو خبر)، والمتصلة تُعرب حسب موقعها (مثل مفعول به).</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أنواع الضمائر</h3>
+            <table>
+                <tr>
+                    <th>النوع</th>
+                    <th>الشخص</th>
+                    <th>العدد</th>
+                    <th>الجنس</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>منفصلة</td>
+                    <td>متكلم</td>
+                    <td>مفرد</td>
+                    <td>مذكر/مؤنث</td>
+                    <td>أنا طالبٌ</td>
+                </tr>
+                <tr>
+                    <td>منفصلة</td>
+                    <td>مخاطب</td>
+                    <td>مفرد</td>
+                    <td>مذكر</td>
+                    <td>أنتَ مجتهدٌ</td>
+                </tr>
+                <tr>
+                    <td>منفصلة</td>
+                    <td>غائب</td>
+                    <td>مفرد</td>
+                    <td>مؤنث</td>
+                    <td>هي ذكيةٌ</td>
+                </tr>
+                <tr>
+                    <td>متصلة</td>
+                    <td>متكلم</td>
+                    <td>مفرد</td>
+                    <td>مذكر/مؤنث</td>
+                    <td>كتابي</td>
+                </tr>
+                <tr>
+                    <td>متصلة</td>
+                    <td>مخاطب</td>
+                    <td>مفرد</td>
+                    <td>مذكر</td>
+                    <td>رأيتكَ</td>
+                </tr>
+                <tr>
+                    <td>متصلة</td>
+                    <td>غائب</td>
+                    <td>مفرد</td>
+                    <td>مؤنث</td>
+                    <td>رأيتها</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الضمير</th>
+                    <th>النوع</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>أنا أقرأُ كتابًا</td>
+                    <td>أنا</td>
+                    <td>منفصلة</td>
+                    <td>مرفوع (فاعل)</td>
+                    <td>متكلم مفرد</td>
+                </tr>
+                <tr>
+                    <td>أنتَ تكتبُ الدرسَ</td>
+                    <td>أنتَ</td>
+                    <td>منفصلة</td>
+                    <td>مرفوع (فاعل)</td>
+                    <td>مخاطب مفرد مذكر</td>
+                </tr>
+                <tr>
+                    <td>هي ذكيةٌ</td>
+                    <td>هي</td>
+                    <td>منفصلة</td>
+                    <td>مرفوع (مبتدأ)</td>
+                    <td>غائب مفرد مؤنث</td>
+                </tr>
+                <tr>
+                    <td>رأيتُهُ في السوقِ</td>
+                    <td>-هُ</td>
+                    <td>متصلة</td>
+                    <td>منصوب (مفعول به)</td>
+                    <td>غائب مفرد مذكر</td>
+                </tr>
+                <tr>
+                    <td>كتابي على الطاولةِ</td>
+                    <td>-ي</td>
+                    <td>متصلة</td>
+                    <td>مجرور (مضاف إليه)</td>
+                    <td>متكلم مفرد</td>
+                </tr>
+                <tr>
+                    <td>سلمى أعطتني قلمًا</td>
+                    <td>-ني</td>
+                    <td>متصلة</td>
+                    <td>منصوب (مفعول به)</td>
+                    <td>متكلم مفرد</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع الضمير في "أنتِ تلعبينَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. منفصلة</li>
+                            <li>ب. متصلة</li>
+                            <li>ج. منفصلة ومتصلة</li>
+                            <li>د. لا يوجد ضمير</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أ. منفصلة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف تُعرب الضمير في "رأيتُها"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مرفوع (فاعل)</li>
+                            <li>ب. منصوب (مفعول به)</li>
+                            <li>ج. مجرور (مضاف إليه)</li>
+                            <li>د. مبني</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. منصوب (مفعول به)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد الضمير ونوعه في "كتابكَ جديدٌ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الضمير: -كَ، النوع: متصلة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على ضمير متصل كمفعول به.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">سلمى رأتني</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>لماذا تُستخدم "نحن" في جملة مثل "نحن ندرسُ"؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">لأنها ضمير منفصل للمتكلم الجمع</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>

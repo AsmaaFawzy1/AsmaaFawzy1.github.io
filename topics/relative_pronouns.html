@@ -1,0 +1,245 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اسم الموصول - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">اسم الموصول</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">اسم الموصول هو اسم معرفة يربط بين جملتين، ويدل على معين، مثل: الذي، التي، الذين، اللائي.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">اسم الموصول يُستخدم لربط جملة وصفية (الصلة) بالاسم الذي يُشير إليه، ويُعرب حسب موقعه في الجملة. يتطلب اسم الموصول جملة صلة تشرح أو توضح المعنى. تختلف أسماء الموصول حسب العدد (مفرد، مثنى، جمع) والجنس (مذكر، مؤنث). يجب أن تحتوي جملة الصلة على ضمير يعود على اسم الموصول (يُسمى العائد).</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع أسماء الموصول:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>مفرد:</strong> الذي (مذكر)، التي (مؤنث).</li>
+                        <li><strong>مثنى:</strong> اللذان (مذكر)، اللتان (مؤنث).</li>
+                        <li><strong>جمع:</strong> الذين (مذكر)، اللائي (مؤنث).</li>
+                    </ul>
+                </li>
+                <li><strong>جملة الصلة:</strong> جملة فعلية أو اسمية تتبع اسم الموصول، مثل "الذي يقرأُ".</li>
+                <li><strong>الإعراب:</strong> يُعرب حسب موقعه (مبتدأ، فاعل، مفعول به، إلخ).</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أسماء الموصول</h3>
+            <table>
+                <tr>
+                    <th>اسم الموصول</th>
+                    <th>العدد</th>
+                    <th>الجنس</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>الذي</td>
+                    <td>مفرد</td>
+                    <td>مذكر</td>
+                    <td>الذي يقرأُ</td>
+                </tr>
+                <tr>
+                    <td>التي</td>
+                    <td>مفرد</td>
+                    <td>مؤنث</td>
+                    <td>التي تلعبُ</td>
+                </tr>
+                <tr>
+                    <td>اللذان</td>
+                    <td>مثنى</td>
+                    <td>مذكر</td>
+                    <td>اللذان يكتبانِ</td>
+                </tr>
+                <tr>
+                    <td>اللتان</td>
+                    <td>مثنى</td>
+                    <td>مؤنث</td>
+                    <td>اللتان ترسمانِ</td>
+                </tr>
+                <tr>
+                    <td>الذين</td>
+                    <td>جمع</td>
+                    <td>مذكر</td>
+                    <td>الذين يدرسونَ</td>
+                </tr>
+                <tr>
+                    <td>اللائي</td>
+                    <td>جمع</td>
+                    <td>مؤنث</td>
+                    <td>اللائي يغنينَ</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>اسم الموصول</th>
+                    <th>جملة الصلة</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>الطالبُ الذي يقرأُ مجتهدٌ</td>
+                    <td>الذي</td>
+                    <td>يقرأُ</td>
+                    <td>مرفوع (صفة)</td>
+                    <td>مفرد مذكر</td>
+                </tr>
+                <tr>
+                    <td>رأيتُ الفتاةَ التي تلعبُ</td>
+                    <td>التي</td>
+                    <td>تلعبُ</td>
+                    <td>منصوب (مفعول به)</td>
+                    <td>مفرد مؤنث</td>
+                </tr>
+                <tr>
+                    <td>اللذان يكتبانِ في الفصلِ</td>
+                    <td>اللذان</td>
+                    <td>يكتبانِ</td>
+                    <td>مرفوع (مبتدأ)</td>
+                    <td>مثنى مذكر</td>
+                </tr>
+                <tr>
+                    <td>اللتان ترسمانِ صورةً</td>
+                    <td>اللتان</td>
+                    <td>ترسمانِ</td>
+                    <td>مرفوع (مبتدأ)</td>
+                    <td>مثنى مؤنث</td>
+                </tr>
+                <tr>
+                    <td>الذين يدرسونَ ناجحونَ</td>
+                    <td>الذين</td>
+                    <td>يدرسونَ</td>
+                    <td>مرفوع (مبتدأ)</td>
+                    <td>جمع مذكر</td>
+                </tr>
+                <tr>
+                    <td>اللائي يغنينَ مبدعاتٌ</td>
+                    <td>اللائي</td>
+                    <td>يغنينَ</td>
+                    <td>مرفوع (مبتدأ)</td>
+                    <td>جمع مؤنث</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما اسم الموصول في "رأيتُ الطالبَ الذي يقرأُ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. الطالبَ</li>
+                            <li>ب. الذي</li>
+                            <li>ج. يقرأُ</li>
+                            <li>د. مجتهدٌ</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. الذي</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف تُعرب "التي" في "الفتاةُ التي تلعبُ ذكيةٌ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مرفوع (مبتدأ)</li>
+                            <li>ب. مرفوع (صفة)</li>
+                            <li>ج. منصوب (مفعول به)</li>
+                            <li>د. مجرور (مضاف إليه)</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. مرفوع (صفة)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد اسم الموصول وجملة الصلة في "الذين يدرسونَ ناجحونَ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">اسم الموصول: الذين، جملة الصلة: يدرسونَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على اسم موصول للجمع المؤنث.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">اللائي يغنينَ مبدعاتٌ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما شرط وجود جملة الصلة مع اسم الموصول؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">يجب أن تحتوي على ضمير يعود على اسم الموصول</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
