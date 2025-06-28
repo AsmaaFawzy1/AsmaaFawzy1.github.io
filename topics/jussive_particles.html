@@ -1,0 +1,234 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أدوات الجزم - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">أدوات الجزم</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">أدوات الجزم هي حروف تدخل على الفعل المضارع فتجزمه، مثل: لم يذهبْ، لام الأمر لا تذهبْ.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">أدوات الجزم هي حروف ناسخة تغير إعراب الفعل المضارع من الرفع إلى الجزم، فتجعله مجزومًا بعلامة السكون (للأفعال العادية) أو بحذف النون (للأفعال الخمسة). تُستخدم هذه الأدوات للنفي، الأمر، أو النهي. تشمل: لم، لما، لام الأمر، لا النهي.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع أدوات الجزم:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>لم:</strong> لنفي الماضي، مثل "لم يذهبْ".</li>
+                        <li><strong>لما:</strong> لنفي الماضي مع استمرار النفي إلى الحاضر، مثل "لما يصلْ".</li>
+                        <li><strong>لام الأمر:</strong> للأمر، مثل "ليذهبْ".</li>
+                        <li><strong>لا النهي:</strong> للنهي، مثل "لا تذهبْ".</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>الفعل المضارع العادي: مجزوم بالسكون، مثل "لم يذهبْ".</li>
+                        <li>الأفعال الخمسة: مجزومة بحذف النون، مثل "لم يدرسوا".</li>
+                    </ul>
+                </li>
+                <li><strong>الاستخدام:</strong> تُستخدم في الجمل الفعلية لتغيير معنى الفعل أو إعرابه.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أدوات الجزم</h3>
+            <table>
+                <tr>
+                    <th>الأداة</th>
+                    <th>المعنى</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>لم</td>
+                    <td>نفي الماضي</td>
+                    <td>لم يذهبْ</td>
+                </tr>
+                <tr>
+                    <td>لما</td>
+                    <td>نفي مستمر</td>
+                    <td>لما يصلْ</td>
+                </tr>
+                <tr>
+                    <td>لام الأمر</td>
+                    <td>الأمر</td>
+                    <td>ليذهبْ</td>
+                </tr>
+                <tr>
+                    <td>لا النهي</td>
+                    <td>النهي</td>
+                    <td>لا تذهبْ</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الأداة</th>
+                    <th>الفعل</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>لم يذهبْ إلى المدرسةِ</td>
+                    <td>لم</td>
+                    <td>يذهبْ</td>
+                    <td>مجزوم بالسكون</td>
+                    <td>فعل مضارع عادي</td>
+                </tr>
+                <tr>
+                    <td>لما يصلْ الطالبُ</td>
+                    <td>لما</td>
+                    <td>يصلْ</td>
+                    <td>مجزوم بالسكون</td>
+                    <td>نفي مستمر</td>
+                </tr>
+                <tr>
+                    <td>ليذهبْ إلى البيتِ</td>
+                    <td>لام الأمر</td>
+                    <td>يذهبْ</td>
+                    <td>مجزوم بالسكون</td>
+                    <td>يدل على الأمر</td>
+                </tr>
+                <tr>
+                    <td>لا تذهبْ بعيدًا</td>
+                    <td>لا النهي</td>
+                    <td>تذهبْ</td>
+                    <td>مجزوم بالسكون</td>
+                    <td>يدل على النهي</td>
+                </tr>
+                <tr>
+                    <td>لم يدرسوا الدرسَ</td>
+                    <td>لم</td>
+                    <td>يدرسوا</td>
+                    <td>مجزوم بحذف النون</td>
+                    <td>من الأفعال الخمسة</td>
+                </tr>
+                <tr>
+                    <td>لا تدرسي الآنَ</td>
+                    <td>لا النهي</td>
+                    <td>تدرسي</td>
+                    <td>مجزوم بحذف النون</td>
+                    <td>من الأفعال الخمسة</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما أداة الجزم في "لم يذهبْ إلى المدرسةِ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. لن</li>
+                            <li>ب. لم</li>
+                            <li>ج. لما</li>
+                            <li>د. لا</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. لم</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف يُعرب الفعل في "لم يدرسوا الدرسَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مرفوع بالنون</li>
+                            <li>ب. منصوب بالفتحة</li>
+                            <li>ج. مجزوم بحذف النون</li>
+                            <li>د. مبني على السكون</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ج. مجزوم بحذف النون</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد أداة الجزم والفعل في "لا تذهبْ بعيدًا".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الأداة: لا النهي، الفعل: تذهبْ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على أداة جزم والفعل المضارع.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">لم يصلْ الطالبُ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما الفرق بين "لم" و"لما" في المعنى؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">"لم" لنفي الماضي، و"لما" لنفي مستمر إلى الحاضر</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>

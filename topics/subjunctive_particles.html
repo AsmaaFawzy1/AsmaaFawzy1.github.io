@@ -1,0 +1,252 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أدوات نصب الفعل المضارع - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">أدوات نصب الفعل المضارع</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">أدوات نصب الفعل المضارع هي حروف تدخل على الفعل المضارع فتنصبه، مثل: لن يذهبَ، أن تدرسَ.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">أدوات نصب الفعل المضارع هي حروف ناسخة تغير إعراب الفعل المضارع من الرفع إلى النصب، فتجعله منصوبًا بعلامة الفتحة (للأفعال العادية) أو بحذف النون (للأفعال الخمسة). هذه الأدوات تُستخدم للتعبير عن النفي، التمني، أو الغرض. تشمل: أن، لن، كي، لام التعليل، حتى، فاء السببية، واو المعية.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع أدوات النصب:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>أن:</strong> للتوكيد أو الغرض، مثل "أريدُ أن أدرسَ".</li>
+                        <li><strong>لن:</strong> لنفي المستقبل، مثل "لن أذهبَ".</li>
+                        <li><strong>كي:</strong> للغرض، مثل "أذاكرُ كي أنجحَ".</li>
+                        <li><strong>لام التعليل:</strong> للتعليل، مثل "أدرسُ لأنجحَ".</li>
+                        <li><strong>حتى:</strong> للغاية، مثل "أعملُ حتى أتعلمَ".</li>
+                        <li><strong>فاء السببية:</strong> للسبب، مثل "أجتهدُ فأنجحَ".</li>
+                        <li><strong>واو المعية:</strong> للمعية، مثل "أخرجُ وألعبَ".</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>الفعل المضارع العادي: منصوب بالفتحة، مثل "لن يذهبَ".</li>
+                        <li>الأفعال الخمسة: منصوبة بحذف النون، مثل "لن تدرسي".</li>
+                    </ul>
+                </li>
+                <li><strong>الاستخدام:</strong> تُستخدم في الجمل الفعلية لتغيير معنى الفعل أو إعرابه.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أدوات نصب الفعل المضارع</h3>
+            <table>
+                <tr>
+                    <th>الأداة</th>
+                    <th>المعنى</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>أن</td>
+                    <td>التوكيد/الغرض</td>
+                    <td>أريدُ أن أدرسَ</td>
+                </tr>
+                <tr>
+                    <td>لن</td>
+                    <td>نفي المستقبل</td>
+                    <td>لن أذهبَ</td>
+                </tr>
+                <tr>
+                    <td>كي</td>
+                    <td>الغرض</td>
+                    <td>أذاكرُ كي أنجحَ</td>
+                </tr>
+                <tr>
+                    <td>لام التعليل</td>
+                    <td>التعليل</td>
+                    <td>أدرسُ لأنجحَ</td>
+                </tr>
+                <tr>
+                    <td>حتى</td>
+                    <td>الغاية</td>
+                    <td>أعملُ حتى أتعلمَ</td>
+                </tr>
+                <tr>
+                    <td>فاء السببية</td>
+                    <td>السبب</td>
+                    <td>أجتهدُ فأنجحَ</td>
+                </tr>
+                <tr>
+                    <td>واو المعية</td>
+                    <td>المعية</td>
+                    <td>أخرجُ وألعبَ</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الأداة</th>
+                    <th>الفعل</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>أريدُ أن أدرسَ</td>
+                    <td>أن</td>
+                    <td>أدرسَ</td>
+                    <td>منصوب بالفتحة</td>
+                    <td>فعل مضارع عادي</td>
+                </tr>
+                <tr>
+                    <td>لن أذهبَ</td>
+                    <td>لن</td>
+                    <td>أذهبَ</td>
+                    <td>منصوب بالفتحة</td>
+                    <td>نفي المستقبل</td>
+                </tr>
+                <tr>
+                    <td>أذاكرُ كي أنجحَ</td>
+                    <td>كي</td>
+                    <td>أنجحَ</td>
+                    <td>منصوب بالفتحة</td>
+                    <td>يدل على الغرض</td>
+                </tr>
+                <tr>
+                    <td>أدرسُ لأنجحَ</td>
+                    <td>لام التعليل</td>
+                    <td>أنجحَ</td>
+                    <td>منصوب بالفتحة</td>
+                    <td>يدل على التعليل</td>
+                </tr>
+                <tr>
+                    <td>لن تدرسي الدرسَ</td>
+                    <td>لن</td>
+                    <td>تدرسي</td>
+                    <td>منصوب بحذف النون</td>
+                    <td>من الأفعال الخمسة</td>
+                </tr>
+                <tr>
+                    <td>أجتهدُ فأنجحَ</td>
+                    <td>فاء السببية</td>
+                    <td>أنجحَ</td>
+                    <td>منصوب بالفتحة</td>
+                    <td>يدل على السبب</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما أداة النصب في "أريدُ أن أدرسَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. لن</li>
+                            <li>ب. أن</li>
+                            <li>ج. كي</li>
+                            <li>د. حتى</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. أن</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف يُعرب الفعل في "لن تدرسي الدرسَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مرفوع بالنون</li>
+                            <li>ب. منصوب بحذف النون</li>
+                            <li>ج. مجزوم بالسكون</li>
+                            <li>د. مبني على الفتح</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. منصوب بحذف النون</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد أداة النصب والفعل في "أذاكرُ كي أنجحَ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الأداة: كي، الفعل: أنجحَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على أداة نصب والفعل المضارع.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أعملُ حتى أتعلمَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما الفرق بين "لن" و"كي" في المعنى؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">"لن" لنفي المستقبل، و"كي" للغرض</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
