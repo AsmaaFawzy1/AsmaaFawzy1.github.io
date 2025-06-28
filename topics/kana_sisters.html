@@ -1,0 +1,251 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كان وأخواتها - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">كان وأخواتها</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">كان وأخواتها هي أفعال ناقصة تدخل على الجملة الاسمية فترفع المبتدأ (يُسمى اسمها) وتنصب الخبر (يُسمى خبرها)، مثل: كان الطالبُ مجتهدًا.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">كان وأخواتها هي أفعال ناقصة تُغير إعراب الجملة الاسمية. تدخل على المبتدأ والخبر، فترفع المبتدأ (يُسمى اسم كان) وتنصب الخبر (يُسمى خبر كان). تُستخدم هذه الأفعال للدلالة على الزمان، الحدوث، أو النفي. تُصنف إلى ثلاثة أنواع حسب تأثيرها على الخبر.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع كان وأخواتها:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>كان، أصبح، أمسى، ظل:</strong> تدل على الزمن أو الحدوث.</li>
+                        <li><strong>صار، بات:</strong> تدل على التحول.</li>
+                        <li><strong>ليس:</strong> تدل على النفي.</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong> 
+                    <ul class="list-circle pr-6">
+                        <li>اسم كان: مرفوع.</li>
+                        <li>خبر كان: منصوب.</li>
+                    </ul>
+                </li>
+                <li><strong>شروط الخبر:</strong> قد يكون مفردًا، جملة، أو شبه جملة.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: كان وأخواتها</h3>
+            <table>
+                <tr>
+                    <th>الفعل</th>
+                    <th>المعنى</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>كان</td>
+                    <td>الزمن/الحدوث</td>
+                    <td>كان الطالبُ مجتهدًا</td>
+                </tr>
+                <tr>
+                    <td>أصبح</td>
+                    <td>الزمن/التحول</td>
+                    <td>أصبح الجوُّ مشمسًا</td>
+                </tr>
+                <tr>
+                    <td>ليس</td>
+                    <td>النفي</td>
+                    <td>ليس اليومُ مشمسًا</td>
+                </tr>
+                <tr>
+                    <td>ظل</td>
+                    <td>الاستمرار</td>
+                    <td>ظل الطالبُ يدرسُ</td>
+                </tr>
+                <tr>
+                    <td>صار</td>
+                    <td>التحول</td>
+                    <td>صار الولدُ طبيبًا</td>
+                </tr>
+                <tr>
+                    <td>بات</td>
+                    <td>الزمن/التحول</td>
+                    <td>بات الجوُّ باردًا</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الفعل</th>
+                    <th>اسم كان</th>
+                    <th>خبر كان</th>
+                    <th>الإعراب</th>
+                </tr>
+                <tr>
+                    <td>كان الطالبُ مجتهدًا</td>
+                    <td>كان</td>
+                    <td>الطالبُ</td>
+                    <td>مجتهدًا</td>
+                    <td>اسم كان مرفوع، خبر كان منصوب</td>
+                </tr>
+                <tr>
+                    <td>أصبح الجوُّ مشمسًا</td>
+                    <td>أصبح</td>
+                    <td>الجوُّ</td>
+                    <td>مشمسًا</td>
+                    <td>اسم أصبح مرفوع، خبر أصبح منصوب</td>
+                </tr>
+                <tr>
+                    <td>ليس اليومُ مشمسًا</td>
+                    <td>ليس</td>
+                    <td>اليومُ</td>
+                    <td>مشمسًا</td>
+                    <td>اسم ليس مرفوع، خبر ليس منصوب</td>
+                </tr>
+                <tr>
+                    <td>ظل الطالبُ يدرسُ</td>
+                    <td>ظل</td>
+                    <td>الطالبُ</td>
+                    <td>يدرسُ</td>
+                    <td>اسم ظل مرفوع، خبر ظل في محل نصب</td>
+                </tr>
+                <tr>
+                    <td>صار الولدُ طبيبًا</td>
+                    <td>صار</td>
+                    <td>الولدُ</td>
+                    <td>طبيبًا</td>
+                    <td>اسم صار مرفوع، خبر صار منصوب</td>
+                </tr>
+                <tr>
+                    <td>بات الجوُّ باردًا</td>
+                    <td>بات</td>
+                    <td>الجوُّ</td>
+                    <td>باردًا</td>
+                    <td>اسم بات مرفوع، خبر بات منصوب</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما الفعل الناقص في "كان الطالبُ مجتهدًا"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. كان</li>
+                            <li>ب. الطالبُ</li>
+                            <li>ج. مجتهدًا</li>
+                            <li>د. لا يوجد</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أ. كان</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف تُعرب "مجتهدًا" في "كان الطالبُ مجتهدًا"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. اسم كان مرفوع</li>
+                            <li>ب. خبر كان منصوب</li>
+                            <li>ج. حال منصوب</li>
+                            <li>د. فاعل مرفوع</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. خبر كان منصوب</span>
+                    </td>
+ nhiêu
+                </tr>
+                <tr>
+                    <td>حدد اسم كان وخبر كان في "أصبح الجوُّ مشمسًا".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">اسم أصبح: الجوُّ، خبر أصبح: مشمسًا</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على "ليس" وخبرها مفرد.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ليس الطالبُ كسولًا</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما نوع الخبر في "ظل الطالبُ يدرسُ"؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">جملة فعلية</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>لماذا تُسمى "كان" فعلًا ناقصًا؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">لأنها تحتاج إلى خبر لإكمال معناها</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>

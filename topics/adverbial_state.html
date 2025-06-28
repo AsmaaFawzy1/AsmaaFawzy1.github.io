@@ -1,0 +1,223 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الحال - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">الحال</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">الحال هو اسم منصوب يصف حال الفاعل أو المفعول به أثناء وقوع الفعل، مثل: جاء الطالبُ مبتسمًا.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">الحال هو اسم منصوب يبين حالة الفاعل أو المفعول به أثناء وقوع الفعل. يأتي الحال غالبًا مفردًا (مثل: مبتسمًا)، أو شبه جملة (جار ومجرور مثل: في الموعدِ، أو ظرف مثل: اليومَ). يرتبط الحال بصاحب الحال (الفاعل أو المفعول به) ويوضح كيفية أو حالة وقوع الفعل.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع الحال:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>مفرد:</strong> اسم منصوب، مثل "مبتسمًا"، "فرحةً".</li>
+                        <li><strong>شبه جملة:</strong> جار ومجرور (مثل: في الموعدِ) أو ظرف (مثل: اليومَ).</li>
+                        <li><strong>جملة:</strong> جملة فعلية (مثل: يضحكُ) أو اسمية (مثل: وجههُ مشرقٌ).</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong> الحال دائمًا منصوب، وشبه الجملة أو الجملة في محل نصب حال.</li>
+                <li><strong>صاحب الحال:</strong> الاسم الذي يصف الحال حالته، ويكون معرفة أو نكرة حسب السياق.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أنواع الحال</h3>
+            <table>
+                <tr>
+                    <th>نوع الحال</th>
+                    <th>الوصف</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>مفرد</td>
+                    <td>اسم منصوب</td>
+                    <td>جاء الطالبُ مبتسمًا</td>
+                </tr>
+                <tr>
+                    <td>شبه جملة</td>
+                    <td>جار ومجرور أو ظرف</td>
+                    <td>جاء الطالبُ في الموعدِ</td>
+                </tr>
+                <tr>
+                    <td>جملة</td>
+                    <td>جملة فعلية أو اسمية</td>
+                    <td>جاء الطالبُ يضحكُ</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الحال</th>
+                    <th>صاحب الحال</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>جاء الطالبُ مبتسمًا</td>
+                    <td>مبتسمًا</td>
+                    <td>الطالبُ</td>
+                    <td>حال منصوب</td>
+                    <td>مفرد، يصف الفاعل</td>
+                </tr>
+                <tr>
+                    <td>رأيتُ الفتاةَ فرحةً</td>
+                    <td>فرحةً</td>
+                    <td>الفتاةَ</td>
+                    <td>حال منصوب</td>
+                    <td>مفرد، يصف المفعول به</td>
+                </tr>
+                <tr>
+                    <td>خرجتُ في الموعدِ</td>
+                    <td>في الموعدِ</td>
+                    <td>ضمير مستتر (أنا)</td>
+                    <td>في محل نصب حال</td>
+                    <td>شبه جملة (جار ومجرور)</td>
+                </tr>
+                <tr>
+                    <td>جلستُ اليومَ</td>
+                    <td>اليومَ</td>
+                    <td>ضمير مستتر (أنا)</td>
+                    <td>في محل نصب حال</td>
+                    <td>شبه جملة (ظرف زمان)</td>
+                </tr>
+                <tr>
+                    <td>رأيتُ الولدَ يضحكُ</td>
+                    <td>يضحكُ</td>
+                    <td>الولدَ</td>
+                    <td>في محل نصب حال</td>
+                    <td>جملة فعلية</td>
+                </tr>
+                <tr>
+                    <td>جاء الطالبُ وجههُ مشرقٌ</td>
+                    <td>وجههُ مشرقٌ</td>
+                    <td>الطالبُ</td>
+                    <td>في محل نصب حال</td>
+                    <td>جملة اسمية</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع الحال في "جاء الطالبُ مبتسمًا"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مفرد</li>
+                            <li>ب. شبه جملة</li>
+                            <li>ج. جملة فعلية</li>
+                            <li>د. جملة اسمية</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أ. مفرد</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        من هو صاحب الحال في "رأيتُ الفتاةَ فرحةً"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. رأيتُ</li>
+                            <li>ب. الفتاةَ</li>
+                            <li>ج. فرحةً</li>
+                            <li>د. لا يوجد</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. الفتاةَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد الحال وصاحب الحال في "خرجتُ في الموعدِ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الحال: في الموعدِ، صاحب الحال: ضمير مستتر (أنا)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على حال جملة فعلية.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">رأيتُ الأطفالَ يلعبونَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>لماذا يكون الحال دائمًا منصوبًا؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">لأنه يصف حالة الفاعل أو المفعول به أثناء الفعل</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
