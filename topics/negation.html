@@ -1,0 +1,241 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>النفي - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">النفي</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">النفي هو أسلوب لغوي يُستخدم لنفي حدوث فعل أو حالة، باستخدام أدوات مثل: لا، لم، لن، ما، ليس.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">النفي في اللغة العربية يتم باستخدام أدوات نفي تؤثر على إعراب الجملة أو معناها. تُستخدم هذه الأدوات في الجمل الفعلية والاسمية، وتختلف حسب زمن الفعل أو نوع الجملة. كل أداة لها قواعد إعرابية محددة تؤثر على الفعل أو الخبر.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أدوات النفي:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>لا:</strong> تنفي المضارع (منصوب) أو تستخدم في النفي العام، مثل "لا أذهبُ".</li>
+                        <li><strong>لم:</strong> تنفي الماضي (مجزوم)، مثل "لم أذهبْ".</li>
+                        <li><strong>لن:</strong> تنفي المستقبل (منصوب)، مثل "لن أذهبَ".</li>
+                        <li><strong>ما:</strong> تنفي الماضي (مجزوم)، مثل "ما ذهبتُ".</li>
+                        <li><strong>ليس:</strong> تنفي الجملة الاسمية، مثل "ليس الطالبُ كسولًا".</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>لا، لن: تجعل الفعل المضارع منصوبًا.</li>
+                        <li>لم، ما: تجعل الفعل المضارع مجزومًا.</li>
+                        <li>ليس: ترفع الاسم وتنصب الخبر.</li>
+                    </ul>
+                </li>
+                <li><strong>الاستخدام:</strong> يعتمد على الزمن (ماضي، مضارع، مستقبل) أو نوع الجملة (اسمية، فعلية).</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أدوات النفي</h3>
+            <table>
+                <tr>
+                    <th>أداة النفي</th>
+                    <th>الاستخدام</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>لا</td>
+                    <td>نفي المضارع/عام</td>
+                    <td>لا أذهبَ</td>
+                </tr>
+                <tr>
+                    <td>لم</td>
+                    <td>نفي الماضي</td>
+                    <td>لم أذهبْ</td>
+                </tr>
+                <tr>
+                    <td>لن</td>
+                    <td>نفي المستقبل</td>
+                    <td>لن أذهبَ</td>
+                </tr>
+                <tr>
+                    <td>ما</td>
+                    <td>نفي الماضي</td>
+                    <td>ما ذهبتُ</td>
+                </tr>
+                <tr>
+                    <td>ليس</td>
+                    <td>نفي الجملة الاسمية</td>
+                    <td>ليس الطالبُ كسولًا</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>أداة النفي</th>
+                    <th>الجملة</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>لا أذهبَ إلى المدرسةِ</td>
+                    <td>لا</td>
+                    <td>أذهبَ إلى المدرسةِ</td>
+                    <td>فعل مضارع منصوب</td>
+                    <td>نفي المضارع</td>
+                </tr>
+                <tr>
+                    <td>لم أذهبْ إلى السوقِ</td>
+                    <td>لم</td>
+                    <td>أذهبْ إلى السوقِ</td>
+                    <td>فعل مضارع مجزوم</td>
+                    <td>نفي الماضي</td>
+                </tr>
+                <tr>
+                    <td>لن أذهبَ غدًا</td>
+                    <td>لن</td>
+                    <td>أذهبَ غدًا</td>
+                    <td>فعل مضارع منصوب</td>
+                    <td>نفي المستقبل</td>
+                </tr>
+                <tr>
+                    <td>ما كتبتُ الواجبَ</td>
+                    <td>ما</td>
+                    <td>كتبتُ الواجبَ</td>
+                    <td>فعل ماضٍ مجزوم</td>
+                    <td>نفي الماضي</td>
+                </tr>
+                <tr>
+                    <td>ليس الطالبُ كسولًا</td>
+                    <td>ليس</td>
+                    <td>الطالبُ كسولًا</td>
+                    <td>اسم ليس مرفوع، خبر ليس منصوب</td>
+                    <td>نفي اسمية</td>
+                </tr>
+                <tr>
+                    <td>لا طالبَ في الفصلِ</td>
+                    <td>لا</td>
+                    <td>طالبَ في الفصلِ</td>
+                    <td>اسم منصوب، خبر في محل رفع</td>
+                    <td>نفي اسمية (لا النافية للجنس)</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما أداة النفي في "لم أذهبْ إلى السوقِ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. لا</li>
+                            <li>ب. لم</li>
+                            <li>ج. لن</li>
+                            <li>د. ليس</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. لم</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف تُعرب الفعل في "لن أذهبَ غدًا"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مرفوع</li>
+                            <li>ب. منصوب</li>
+                            <li>ج. مجزوم</li>
+                            <li>د. مبني</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. منصوب</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد أداة النفي والجملة في "ليس الطالبُ كسولًا".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أداة النفي: ليس، الجملة: الطالبُ كسولًا</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة فعلية تنفي المستقبل.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">لن أدرسَ الليلةَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما الفرق بين "لم" و"لن" في النفي؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">"لم" تنفي الماضي وتجزم الفعل، "لن" تنفي المستقبل وتنصب الفعل</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
