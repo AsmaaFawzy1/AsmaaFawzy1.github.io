@@ -1,0 +1,256 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الممنوع من الصرف - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">الممنوع من الصرف</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">الممنوع من الصرف هو الاسم الذي لا يقبل التنوين ولا يُعرب بالكسرة في حالة الجر، بل بالفتحة، مثل: أحمدَ، مساجدَ.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">الممنوع من الصرف هو الاسم الذي يُمنع من قبول التنوين وعلامة الجر بالكسرة بسبب صيغته أو وزنه، فيُعرب في حالة الجر بالفتحة بدلاً من الكسرة. ينقسم إلى أنواع بناءً على الأسباب التي تمنعه من الصرف، مثل كونه اسم عَلَم أو على صيغة أفعل التفضيل.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أسباب المنع من الصرف:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>أسماء الأعلام:</strong> مثل أسماء الأشخاص (أحمدَ)، المدن (مكةَ)، أو القبائل (تميمَ).</li>
+                        <li><strong>الأسماء الأعجمية:</strong> مثل إبراهيمَ، يوسفَ.</li>
+                        <li><strong>الأسماء على وزن أفعل التفضيل:</strong> مثل أفضلَ، أكبرَ.</li>
+                        <li><strong>الأسماء المنتهية بألف ونون زائدتين:</strong> مثل عثمانَ، سليمانَ.</li>
+                        <li><strong>الأسماء المركبة تركيبًا مزجيًا:</strong> مثل بعلبكَ، حضرموتَ.</li>
+                        <li><strong>جمع المؤنث السالم:</strong> مثل مساجدَ، معلماتَ.</li>
+                        <li><strong>الأسماء على وزن فَعْلان:</strong> مثل سكرانَ، غضبانَ.</li>
+                        <li><strong>الأسماء المختومة بألف مقصورة أو ممدودة:</strong> مثل عصا، سماءَ.</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>رفع: بالضمة (ظاهرة أو مقدرة)، مثل "أحمدُ".</li>
+                        <li>نصب: بالفتحة، مثل "رأيتُ أحمدَ".</li>
+                        <li>جر: بالفتحة بدلاً من الكسرة، مثل "مررتُ بأحمدَ".</li>
+                    </ul>
+                </li>
+                <li><strong>شروط المنع:</strong> يُمنع من الصرف إذا لم يكن مضافًا ولم يسبقه "ال"، إلا إذا كان معرفًا بـ"ال" فيُعرب بالكسرة، مثل "بالمساجدِ".</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: الممنوع من الصرف</h3>
+            <table>
+                <tr>
+                    <th>النوع</th>
+                    <th>مثال</th>
+                    <th>الرفع</th>
+                    <th>النصب</th>
+                    <th>الجر</th>
+                </tr>
+                <tr>
+                    <td>اسم عَلَم</td>
+                    <td>أحمدَ</td>
+                    <td>أحمدُ</td>
+                    <td>أحمدَ</td>
+                    <td>بأحمدَ</td>
+                </tr>
+                <tr>
+                    <td>اسم أعجمي</td>
+                    <td>إبراهيمَ</td>
+                    <td>إبراهيمُ</td>
+                    <td>إبراهيمَ</td>
+                    <td>بإبراهيمَ</td>
+                </tr>
+                <tr>
+                    <td>أفعل التفضيل</td>
+                    <td>أفضلَ</td>
+                    <td>أفضلُ</td>
+                    <td>أفضلَ</td>
+                    <td>بأفضلَ</td>
+                </tr>
+                <tr>
+                    <td>جمع مؤنث سالم</td>
+                    <td>مساجدَ</td>
+                    <td>مساجدُ</td>
+                    <td>مساجدَ</td>
+                    <td>بمساجدَ</td>
+                </tr>
+                <tr>
+                    <td>وزن فَعْلان</td>
+                    <td>سكرانَ</td>
+                    <td>سكرانُ</td>
+                    <td>سكرانَ</td>
+                    <td>بسكرانَ</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الاسم</th>
+                    <th>النوع</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>أحمدُ مجتهدٌ</td>
+                    <td>أحمدُ</td>
+                    <td>اسم عَلَم</td>
+                    <td>مبتدأ مرفوع بالضمة</td>
+                    <td>ممنوع من الصرف</td>
+                </tr>
+                <tr>
+                    <td>رأيتُ أحمدَ</td>
+                    <td>أحمدَ</td>
+                    <td>اسم عَلَم</td>
+                    <td>مفعول به منصوب بالفتحة</td>
+                    <td>ممنوع من الصرف</td>
+                </tr>
+                <tr>
+                    <td>مررتُ بأحمدَ</td>
+                    <td>أحمدَ</td>
+                    <td>اسم عَلَم</td>
+                    <td>اسم مجرور بالفتحة</td>
+                    <td>ممنوع من الصرف</td>
+                </tr>
+                <tr>
+                    <td>إبراهيمُ يدرسُ</td>
+                    <td>إبراهيمُ</td>
+                    <td>اسم أعجمي</td>
+                    <td>فاعل مرفوع بالضمة</td>
+                    <td>ممنوع من الصرف</td>
+                </tr>
+                <tr>
+                    <td>مساجدُ المدينةِ جميلةٌ</td>
+                    <td>مساجدُ</td>
+                    <td>جمع مؤنث سالم</td>
+                    <td>مبتدأ مرفوع بالضمة</td>
+                    <td>ممنوع من الصرف</td>
+                </tr>
+                <tr>
+                    <td>اخترتُ أفضلَ كتابٍ</td>
+                    <td>أفضلَ</td>
+                    <td>أفعل التفضيل</td>
+                    <td>مفعول به منصوب بالفتحة</td>
+                    <td>ممنوع من الصرف</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع الاسم "أحمدَ" في "رأيتُ أحمدَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. اسم عَلَم</li>
+                            <li>ب. جمع مؤنث سالم</li>
+                            <li>ج. أفعل التفضيل</li>
+                            <li>د. اسم أعجمي</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أ. اسم عَلَم</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف يُعرب الاسم "مساجدَ" في "مررتُ بمساجدَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مرفوع بالضمة</li>
+                            <li>ب. منصوب بالفتحة</li>
+                            <li>ج. مجرور بالفتحة</li>
+                            <li>د. مجرور بالكسرة</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ج. مجرور بالفتحة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد نوع الاسم وإعرابه في "إبراهيمُ يدرسُ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">النوع: اسم أعجمي، الإعراب: فاعل مرفوع بالضمة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على اسم ممنوع من الصرف في حالة الجر.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">مررتُ بمكةَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>لماذا يُمنع الاسم "أحمدَ" من الصرف؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">لأنه اسم عَلَم</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
