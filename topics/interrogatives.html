@@ -1,0 +1,241 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أدوات الاستفهام - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">أدوات الاستفهام</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">أدوات الاستفهام هي كلمات تُستخدم لبناء جمل استفهامية للسؤال عن شيء أو شخص أو حالة، مثل: من، ما، متى، أين، كيف.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">أدوات الاستفهام تُستخدم لتكوين جمل استفهامية تطلب إجابة عن معلومات محددة. تُوضع هذه الأدوات في بداية الجملة، وتؤثر على معناها وإعرابها حسب نوع الأداة وسياق الجملة (اسمية أو فعلية). كل أداة تُستخدم لسؤال عن معنى معين، مثل الشخص، الشيء، الزمان، أو المكان.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع أدوات الاستفهام:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>من:</strong> للسؤال عن العاقل، مثل "من الطالبُ؟".</li>
+                        <li><strong>ما:</strong> للسؤال عن غير العاقل، مثل "ما الكتابُ؟".</li>
+                        <li><strong>متى:</strong> للسؤال عن الزمان، مثل "متى جئتَ؟".</li>
+                        <li><strong>أين:</strong> للسؤال عن المكان، مثل "أين الكتابُ؟".</li>
+                        <li><strong>كيف:</strong> للسؤال عن الحالة، مثل "كيف الحالُ؟".</li>
+                        <li><strong>كم:</strong> للسؤال عن العدد أو الكمية، مثل "كم كتابًا؟".</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong> أدوات الاستفهام غالبًا مبنية، وتؤثر على إعراب الجملة حسب نوعها (مثل مبتدأ أو خبر).</li>
+                <li><strong>الاستخدام:</strong> تُستخدم في الجمل الاسمية والفعلية، وتتطلب إجابة تتوافق مع نوع السؤال.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أدوات الاستفهام</h3>
+            <table>
+                <tr>
+                    <th>أداة الاستفهام</th>
+                    <th>المعنى</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>من</td>
+                    <td>العاقل</td>
+                    <td>من الطالبُ؟</td>
+                </tr>
+                <tr>
+                    <td>ما</td>
+                    <td>غير العاقل</td>
+                    <td>ما الكتابُ؟</td>
+                </tr>
+                <tr>
+                    <td>متى</td>
+                    <td>الزمان</td>
+                    <td>متى جئتَ؟</td>
+                </tr>
+                <tr>
+                    <td>أين</td>
+                    <td>المكان</td>
+                    <td>أين الكتابُ؟</td>
+                </tr>
+                <tr>
+                    <td>كيف</td>
+                    <td>الحالة</td>
+                    <td>كيف الحالُ؟</td>
+                </tr>
+                <tr>
+                    <td>كم</td>
+                    <td>العدد/الكمية</td>
+                    <td>كم كتابًا؟</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>أداة الاستفهام</th>
+                    <th>الجملة</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>من الطالبُ؟</td>
+                    <td>من</td>
+                    <td>الطالبُ</td>
+                    <td>مبتدأ مرفوع</td>
+                    <td>استفهام عن العاقل</td>
+                </tr>
+                <tr>
+                    <td>ما الكتابُ؟</td>
+                    <td>ما</td>
+                    <td>الكتابُ</td>
+                    <td>مبتدأ مرفوع</td>
+                    <td>استفهام عن غير العاقل</td>
+                </tr>
+                <tr>
+                    <td>متى جئتَ؟</td>
+                    <td>متى</td>
+                    <td>جئتَ</td>
+                    <td>فعل ماضٍ مبني</td>
+                    <td>استفهام عن الزمان</td>
+                </tr>
+                <tr>
+                    <td>أين الكتابُ؟</td>
+                    <td>أين</td>
+                    <td>الكتابُ</td>
+                    <td>مبتدأ مرفوع</td>
+                    <td>استفهام عن المكان</td>
+                </tr>
+                <tr>
+                    <td>كيف الحالُ؟</td>
+                    <td>كيف</td>
+                    <td>الحالُ</td>
+                    <td>مبتدأ مرفوع</td>
+                    <td>استفهام عن الحالة</td>
+                </tr>
+                <tr>
+                    <td>كم كتابًا اشتريتَ؟</td>
+                    <td>كم</td>
+                    <td>كتابًا اشتريتَ</td>
+                    <td>معدود منصوب، فعل ماضٍ مبني</td>
+                    <td>استفهام عن العدد</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما أداة الاستفهام في "أين الكتابُ؟"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. من</li>
+                            <li>ب. ما</li>
+                            <li>ج. أين</li>
+                            <li>د. كيف</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ج. أين</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع السؤال في "كم كتابًا اشتريتَ؟"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. عن العاقل</li>
+                            <li>ب. عن الزمان</li>
+                            <li>ج. عن العدد</li>
+                            <li>د. عن الحالة</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ج. عن العدد</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد أداة الاستفهام والجملة في "متى جئتَ؟".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أداة الاستفهام: متى، الجملة: جئتَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة استفهامية تسأل عن الحالة.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">كيف الطالبُ؟</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>لماذا تُوضع أدوات الاستفهام في بداية الجملة؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">للفت الانتباه إلى السؤال وتحديد نوع المعلومة المطلوبة</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
