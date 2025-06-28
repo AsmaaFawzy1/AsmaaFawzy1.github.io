@@ -1,0 +1,221 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الجملة الفعلية والاسمية - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">الجملة الفعلية والاسمية</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">الجملة الاسمية هي جملة تبدأ باسم وتتكون من مبتدأ وخبر، والجملة الفعلية هي جملة تبدأ بفعل وتتكون من فعل وفاعل وقد تحتوي على مفعول به.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">الجملتان الفعلية والاسمية هما النوعان الأساسيان للجمل في اللغة العربية. الجملة الاسمية تعبر عن حالة أو وصف دائم، بينما الجملة الفعلية تصف حدثًا أو فعلاً. كل نوع له مكوناته الخاصة وإعرابه، مما يساعد في فهم بنية الجملة.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>الجملة الاسمية:</strong> تتكون من مبتدأ (اسم مرفوع) وخبر (يكمل معنى المبتدأ). مثل: "الطالبُ مجتهدٌ".</li>
+                <li><strong>الجملة الفعلية:</strong> تتكون من فعل وفاعل، وقد تحتوي على مفعول به أو تتمة. مثل: "كتبَ الطالبُ الدرسَ".</li>
+                <li><strong>الإعراب:</strong> 
+                    <ul class="list-circle pr-6">
+                        <li>في الجملة الاسمية: المبتدأ مرفوع، والخبر مرفوع أو في محل رفع.</li>
+                        <li>في الجملة الفعلية: الفاعل مرفوع، والمفعول به منصوب.</li>
+                    </ul>
+                </li>
+                <li><strong>الفرق:</strong> الجملة الاسمية تبدأ باسم وتصف حالة، بينما الجملة الفعلية تبدأ بفعل وتصف حدثًا.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: الجملة الفعلية والاسمية</h3>
+            <table>
+                <tr>
+                    <th>نوع الجملة</th>
+                    <th>المكونات</th>
+                    <th>مثال</th>
+                    <th>الإعراب</th>
+                </tr>
+                <tr>
+                    <td>اسمية</td>
+                    <td>مبتدأ + خبر</td>
+                    <td>الطالبُ مجتهدٌ</td>
+                    <td>مبتدأ مرفوع، خبر مرفوع</td>
+                </tr>
+                <tr>
+                    <td>فعلية</td>
+                    <td>فعل + فاعل + (مفعول به)</td>
+                    <td>كتبَ الطالبُ الدرسَ</td>
+                    <td>فعل مبني، فاعل مرفوع، مفعول به منصوب</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>نوع الجملة</th>
+                    <th>المكونات</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>السماءُ صافيةٌ</td>
+                    <td>اسمية</td>
+                    <td>السماءُ (مبتدأ)، صافيةٌ (خبر)</td>
+                    <td>مبتدأ مرفوع، خبر مرفوع</td>
+                    <td>خبر مفرد</td>
+                </tr>
+                <tr>
+                    <td>كتبَ الولدُ الواجبَ</td>
+                    <td>فعلية</td>
+                    <td>كتبَ (فعل)، الولدُ (فاعل)، الواجبَ (مفعول به)</td>
+                    <td>فعل مبني، فاعل مرفوع، مفعول به منصوب</td>
+                    <td>فعل ماضي</td>
+                </tr>
+                <tr>
+                    <td>الأطفالُ يلعبونَ في الحديقةِ</td>
+                    <td>اسمية</td>
+                    <td>الأطفالُ (مبتدأ)، يلعبونَ في الحديقةِ (خبر)</td>
+                    <td>مبتدأ مرفوع، خبر في محل رفع</td>
+                    <td>خبر جملة فعلية</td>
+                </tr>
+                <tr>
+                    <td>زرتُ المدرسةَ</td>
+                    <td>فعلية</td>
+                    <td>زرتُ (فعل + ضمير)، المدرسةَ (مفعول به)</td>
+                    <td>فعل مبني، مفعول به منصوب</td>
+                    <td>الفاعل ضمير مستتر</td>
+                </tr>
+                <tr>
+                    <td>الكتابُ على الطاولةِ</td>
+                    <td>اسمية</td>
+                    <td>الكتابُ (مبتدأ)، على الطاولةِ (خبر)</td>
+                    <td>مبتدأ مرفوع، خبر في محل رفع</td>
+                    <td>خبر شبه جملة</td>
+                </tr>
+                <tr>
+                    <td>يدرسُ الطالبُ بجدٍّ</td>
+                    <td>فعلية</td>
+                    <td>يدرسُ (فعل)، الطالبُ (فاعل)، بجدٍّ (حال)</td>
+                    <td>فعل مبني، فاعل مرفوع، حال منصوب</td>
+                    <td>فعل مضارع</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع الجملة في "الطالبُ يدرسُ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. اسمية</li>
+                            <li>ب. فعلية</li>
+                            <li>ج. كلاهما</li>
+                            <li>د. لا يوجد</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أ. اسمية</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        حدد المكونات في "كتبَ الولدُ الدرسَ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مبتدأ وخبر</li>
+                            <li>ب. فعل وفاعل</li>
+                            <li>ج. فعل وفاعل ومفعول به</li>
+                            <li>د. مبتدأ وفاعل</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ج. فعل وفاعل ومفعول به</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد المبتدأ والخبر في "الحديقةُ جميلةٌ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">المبتدأ: الحديقةُ، الخبر: جميلةٌ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة فعلية تحتوي على مفعول به.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">قرأتُ كتابًا</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما الفرق بين الجملة الاسمية والفعلية؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الاسمية تبدأ باسم وتصف حالة، والفعلية تبدأ بفعل وتصف حدثًا</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>

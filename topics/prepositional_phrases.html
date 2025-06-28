@@ -1,0 +1,216 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شبه الجملة - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">شبه الجملة</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">شبه الجملة هي تركيب يتكون من حرف جر واسم مجرور أو ظرف، ويؤدي وظيفة الخبر أو الحال أو المفعول به في الجملة.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">شبه الجملة هي تركيب يشبه الجملة لكنه لا يحتوي على فعل. يتكون من نوعين رئيسيين: جار ومجرور (حرف جر + اسم مجرور) أو ظرف (زمان أو مكان). تُستخدم شبه الجملة كخبر في الجملة الاسمية، أو كحال، أو كمفعول به في بعض الحالات. تُعرب شبه الجملة في محل رفع (خبر)، نصب (حال أو مفعول به)، أو جر (مضاف إليه).</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>جار ومجرور:</strong> يتكون من حرف جر (مثل في، على) واسم مجرور، مثل "في المدرسةِ".</li>
+                <li><strong>ظرف:</strong> ظرف زمان (مثل اليومَ) أو مكان (مثل هناكَ).</li>
+                <li><strong>الوظيفة:</strong> تُستخدم كخبر (الكتابُ على الطاولةِ)، حال (جاء الطالبُ في الموعدِ)، أو مفعول به (مررتُ بالحديقةِ).</li>
+                <li><strong>الإعراب:</strong> تُعرب في محل رفع، نصب، أو جر حسب موقعها في الجملة.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أنواع شبه الجملة</h3>
+            <table>
+                <tr>
+                    <th>النوع</th>
+                    <th>الوصف</th>
+                    <th>مثال</th>
+                    <th>الوظيفة</th>
+                </tr>
+                <tr>
+                    <td>جار ومجرور</td>
+                    <td>حرف جر + اسم مجرور</td>
+                    <td>في المدرسةِ</td>
+                    <td>خبر، حال، مفعول به</td>
+                </tr>
+                <tr>
+                    <td>ظرف</td>
+                    <td>ظرف زمان أو مكان</td>
+                    <td>اليومَ</td>
+                    <td>خبر، حال، مفعول به</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>شبه الجملة</th>
+                    <th>النوع</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>الكتابُ على الطاولةِ</td>
+                    <td>على الطاولةِ</td>
+                    <td>جار ومجرور</td>
+                    <td>في محل رفع (خبر)</td>
+                    <td>خبر في جملة اسمية</td>
+                </tr>
+                <tr>
+                    <td>جاء الطالبُ في الموعدِ</td>
+                    <td>في الموعدِ</td>
+                    <td>جار ومجرور</td>
+                    <td>في محل نصب (حال)</td>
+                    <td>حال في جملة فعلية</td>
+                </tr>
+                <tr>
+                    <td>جلستُ اليومَ</td>
+                    <td>اليومَ</td>
+                    <td>ظرف زمان</td>
+                    <td>في محل نصب (مفعول به)</td>
+                    <td>مفعول به ظرفي</td>
+                </tr>
+                <tr>
+                    <td>الطلابُ في الفصلِ</td>
+                    <td>في الفصلِ</td>
+                    <td>جار ومجرور</td>
+                    <td>في محل رفع (خبر)</td>
+                    <td>خبر في جملة اسمية</td>
+                </tr>
+                <tr>
+                    <td>مررتُ بالحديقةِ</td>
+                    <td>بالحديقةِ</td>
+                    <td>جار ومجرور</td>
+                    <td>في محل نصب (مفعول به)</td>
+                    <td>مفعول به في جملة فعلية</td>
+                </tr>
+                <tr>
+                    <td>يدرسُ هناكَ</td>
+                    <td>هناكَ</td>
+                    <td>ظرف مكان</td>
+                    <td>في محل نصب (حال)</td>
+                    <td>حال في جملة فعلية</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع شبه الجملة في "الكتابُ على الطاولةِ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. ظرف زمان</li>
+                            <li>ب. جار ومجرور</li>
+                            <li>ج. ظرف مكان</li>
+                            <li>د. جملة فعلية</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. جار ومجرور</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف تُعرب شبه الجملة في "جاء الطالبُ في الموعدِ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. في محل رفع (خبر)</li>
+                            <li>ب. في محل نصب (حال)</li>
+                            <li>ج. في محل نصب (مفعول به)</li>
+                            <li>د. في محل جر (مضاف إليه)</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. في محل نصب (حال)</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد شبه الجملة ونوعها في "جلستُ هناكَ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">شبه الجملة: هناكَ، النوع: ظرف مكان</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على شبه جملة كخبر.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الطلابُ في الفصلِ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما الفرق بين جار ومجرور وظرف في شبه الجملة؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">جار ومجرور يتكون من حرف جر واسم مجرور، والظرف هو اسم زمان أو مكان</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
