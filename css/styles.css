@@ -41,7 +41,7 @@ tr:nth-child(even) {
     transform: translate(-50%, -50%) rotate(-45deg);
     font-size: 4rem;
     color: rgba(0, 0, 0, 0.1);
-    z-index: -1;
+    z-index: 1;
     pointer-events: none;
     font-family: 'Noto Naskh Arabic', sans-serif;
 }
