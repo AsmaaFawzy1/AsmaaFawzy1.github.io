@@ -1,0 +1,234 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الأسماء - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">الأسماء</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">الاسم هو كلمة تدل على شخص، حيوان، نبات، جماد، صفة، أو مكان أو زمان، سواء كان معينًا (معرفة) أو غير معين (نكرة).</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">الأسماء هي الأساس في بناء الجملة العربية، حيث تدل على كل ما يمكن أن يُشار إليه أو يُوصف. تنقسم الأسماء حسب دلالتها إلى فئات محددة، مما يساعد على فهم وظيفتها في الجملة. كما تُصنف الأسماء إلى نكرة (غير محددة) ومعرفة (محددة)، وهذا يؤثر على إعرابها واستخدامها.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع الأسماء حسب الدلالة:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>إنسان:</strong> أسماء تدل على أشخاص، مثل الأسماء العلم (محمد، فاطمة).</li>
+                        <li><strong>حيوان:</strong> أسماء تدل على كائنات حية، مثل قط، أسد.</li>
+                        <li><strong>نبات:</strong> أسماء تدل على النباتات، مثل وردة، شجرة.</li>
+                        <li><strong>جماد:</strong> أسماء تدل على أشياء غير حية، مثل كتاب، قلم.</li>
+                        <li><strong>صفة:</strong> أسماء تدل على الخصائص، مثل جميل، قوي.</li>
+                        <li><strong>مكان أو زمان:</strong> أسماء تدل على مواقع أو أوقات، مثل مصر، اليوم.</li>
+                    </ul>
+                </li>
+                <li><strong>النكرة والمعرفة:</strong> النكرة غير محددة (كتابٌ)، والمعرفة محددة (الكتابُ، محمد).</li>
+                <li><strong>الإعراب:</strong> الأسماء تُعرب (مرفوع، منصوب، مجرور) حسب موقعها في الجملة.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: أنواع الأسماء</h3>
+            <table>
+                <tr>
+                    <th>النوع</th>
+                    <th>الوصف</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>إنسان</td>
+                    <td>يدل على شخص</td>
+                    <td>محمد، سلمى</td>
+                </tr>
+                <tr>
+                    <td>حيوان</td>
+                    <td>يدل على كائن حي</td>
+                    <td>قط، كلب</td>
+                </tr>
+                <tr>
+                    <td>نبات</td>
+                    <td>يدل على نبات</td>
+                    <td>وردة، شجرة</td>
+                </tr>
+                <tr>
+                    <td>جماد</td>
+                    <td>يدل على شيء غير حي</td>
+                    <td>كتاب، قلم</td>
+                </tr>
+                <tr>
+                    <td>صفة</td>
+                    <td>يدل على خاصية</td>
+                    <td>جميل، شجاع</td>
+                </tr>
+                <tr>
+                    <td>مكان/زمان</td>
+                    <td>يدل على مكان أو وقت</td>
+                    <td>مصر، اليوم</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>النوع</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>محمدٌ يدرسُ</td>
+                    <td>إنسان</td>
+                    <td>مرفوع (مبتدأ)</td>
+                    <td>اسم علم معرفة</td>
+                </tr>
+                <tr>
+                    <td>القطُّ يأكلُ السمكَ</td>
+                    <td>حيوان</td>
+                    <td>مرفوع (فاعل)</td>
+                    <td>معرف بالألف واللام</td>
+                </tr>
+                <tr>
+                    <td>زرتُ وردةً في الحديقةِ</td>
+                    <td>نبات</td>
+                    <td>منصوب (مفعول به)</td>
+                    <td>نكرة</td>
+                </tr>
+                <tr>
+                    <td>الكتابُ على الطاولةِ</td>
+                    <td>جماد</td>
+                    <td>مرفوع (مبتدأ)</td>
+                    <td>معرف بالألف واللام</td>
+                </tr>
+                <tr>
+                    <td>الطالبُ شجاعٌ</td>
+                    <td>صفة</td>
+                    <td>مرفوع (خبر)</td>
+                    <td>نكرة تابعة للمعرفة</td>
+                </tr>
+                <tr>
+                    <td>سافرتُ إلى مصرَ</td>
+                    <td>مكان</td>
+                    <td>مجرور (بإلى)</td>
+                    <td>اسم علم ممنوع من الصرف</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع الاسم في "زرتُ حديقةً جميلةً"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. إنسان</li>
+                            <li>ب. نبات</li>
+                            <li>ج. مكان</li>
+                            <li>د. صفة</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ج. مكان</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع الاسم في "الطالبُ ذكيٌ" لكلمة "ذكيٌ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. إنسان</li>
+                            <li>ب. صفة</li>
+                            <li>ج. جماد</li>
+                            <li>د. مكان</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. صفة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>أعط ثلاثة أمثلة لأسماء تدل على حيوانات.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">قط، كلب، أسد</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على اسم يدل على جماد واسم يدل على صفة.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">القلمُ جديدٌ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>لماذا تُعد "مصر" اسمًا ممنوعًا من الصرف في "سافرتُ إلى مصرَ"؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">لأنها اسم علم أعجمي</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
