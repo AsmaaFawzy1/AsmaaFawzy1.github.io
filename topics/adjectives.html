@@ -1,0 +1,223 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الصفة - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">الصفة</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">الصفة هي اسم تابع يصف الموصوف أو يبين صفته، وتتبعه في الإعراب والتعريف والتنكير، مثل: الطالبُ المجتهدُ.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">الصفة هي اسم يتبع اسمًا آخر (الموصوف) ليوضح صفة أو خاصية له. تتطابق الصفة مع الموصوف في أربعة أمور: الإعراب (رفع، نصب، جر)، التعريف أو التنكير، العدد (مفرد، مثنى، جمع)، والجنس (مذكر، مؤنث). يمكن أن تكون الصفة مفردة، جملة، أو شبه جملة (مثل اسم موصول مع صلته).</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>أنواع الصفة:</strong>
+                    <ul class="list-circle pr-6">
+                        <li><strong>مفردة:</strong> اسم مشتق، مثل "مجتهدٌ"، "جميلةٌ".</li>
+                        <li><strong>جملة:</strong> جملة فعلية أو اسمية، مثل "الذي يدرسُ".</li>
+                        <li><strong>شبه جملة:</strong> جار ومجرور أو ظرف، مثل "في الفصلِ".</li>
+                    </ul>
+                </li>
+                <li><strong>الاتفاق:</strong> الصفة تتفق مع الموصوف في الإعراب، التعريف، العدد، والجنس.</li>
+                <li><strong>الإعراب:</strong> تُعرب الصفة حسب إعراب الموصوف (مرفوع، منصوب، مجرور).</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: الصفة</h3>
+            <table>
+                <tr>
+                    <th>نوع الصفة</th>
+                    <th>الوصف</th>
+                    <th>مثال</th>
+                </tr>
+                <tr>
+                    <td>مفردة</td>
+                    <td>اسم مشتق يصف الموصوف</td>
+                    <td>الطالبُ المجتهدُ</td>
+                </tr>
+                <tr>
+                    <td>جملة</td>
+                    <td>جملة فعلية أو اسمية</td>
+                    <td>الطالبُ الذي يدرسُ</td>
+                </tr>
+                <tr>
+                    <td>شبه جملة</td>
+                    <td>جار ومجرور أو ظرف</td>
+                    <td>الكتابُ في الحقيبةِ</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الموصوف</th>
+                    <th>الصفة</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>الطالبُ المجتهدُ ناجحٌ</td>
+                    <td>الطالبُ</td>
+                    <td>المجتهدُ</td>
+                    <td>موصوف مرفوع، صفة مرفوعة</td>
+                    <td>مفردة، معرفة</td>
+                </tr>
+                <tr>
+                    <td>رأيتُ فتاةً جميلةً</td>
+                    <td>فتاةً</td>
+                    <td>جميلةً</td>
+                    <td>موصوف منصوب، صفة منصوبة</td>
+                    <td>مفردة، نكرة</td>
+                </tr>
+                <tr>
+                    <td>في كتابٍ جديدٍ</td>
+                    <td>كتابٍ</td>
+                    <td>جديدٍ</td>
+                    <td>موصوف مجرور، صفة مجرورة</td>
+                    <td>مفردة، نكرة</td>
+                </tr>
+                <tr>
+                    <td>الطالبُ الذي يدرسُ مجتهدٌ</td>
+                    <td>الطالبُ</td>
+                    <td>الذي يدرسُ</td>
+                    <td>موصوف مرفوع، صفة في محل رفع</td>
+                    <td>جملة (اسم موصول)</td>
+                </tr>
+                <tr>
+                    <td>رأيتُ الطلابَ الذين يلعبونَ</td>
+                    <td>الطلابَ</td>
+                    <td>الذين يلعبونَ</td>
+                    <td>موصوف منصوب، صفة في محل نصب</td>
+                    <td>جملة، جمع مذكر</td>
+                </tr>
+                <tr>
+                    <td>الكتابُ في الحقيبةِ مفيدٌ</td>
+                    <td>الكتابُ</td>
+                    <td>في الحقيبةِ</td>
+                    <td>موصوف مرفوع، صفة في محل رفع</td>
+                    <td>شبه جملة (جار ومجرور)</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما نوع الصفة في "الطالبُ المجتهدُ ناجحٌ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. مفردة</li>
+                            <li>ب. جملة</li>
+                            <li>ج. شبه جملة</li>
+                            <li>د. لا يوجد</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">أ. مفردة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف تُعرب "جميلةً" في "رأيتُ فتاةً جميلةً"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. موصوف منصوب</li>
+                            <li>ب. صفة منصوبة</li>
+                            <li>ج. حال منصوب</li>
+                            <li>د. خبر منصوب</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. صفة منصوبة</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد الموصوف والصفة في "الطالبُ الذي يدرسُ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الموصوف: الطالبُ، الصفة: الذي يدرسُ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على صفة شبه جملة.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الكتابُ في الحقيبةِ جديدٌ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ما الذي يجب أن يتفق فيه الموصوف والصفة؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">الإعراب، التعريف، العدد، والجنس</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>

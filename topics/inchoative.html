@@ -1,0 +1,220 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المبتدأ المتأخر والخبر المقدم - دليل قواعد اللغة العربية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap');
+    </style>
+</head>
+<body class="bg-gray-100 font-sans relative">
+    <div class="watermark">أ. أسماء فوزي</div>
+    <header class="bg-blue-600 text-white p-6 text-center shadow-lg">
+        <h1 class="text-4xl font-bold mb-2">المبتدأ المتأخر والخبر المقدم</h1>
+        <nav class="mt-4">
+            <a href="../index.html" class="text-white hover:bg-blue-700 px-3 py-2 rounded">العودة إلى الصفحة الرئيسية</a>
+        </nav>
+    </header>
+    <main class="container mx-auto p-6">
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">التعريف</h2>
+            <p class="text-lg">المبتدأ المتأخر والخبر المقدم هو تركيب جملة اسمية يبدأ فيها الخبر قبل المبتدأ، مثل: في الغرفةِ كتابٌ.</p>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">الشرح التفصيلي</h2>
+            <p class="mb-4">في الجملة الاسمية العادية، يأتي المبتدأ أولاً ثم الخبر. لكن في بعض الحالات، يُقدم الخبر ويُؤخر المبتدأ لأغراض بلاغية، مثل التركيز على الخبر أو لتناسب السياق. هذا التركيب شائع عندما يكون الخبر شبه جملة (جار ومجرور أو ظرف) أو عند استخدام كان وأخواتها. المبتدأ يبقى مرفوعًا، والخبر في محل رفع.</p>
+            <ul class="list-disc pr-6 mb-4">
+                <li><strong>شروط التقديم والتأخير:</strong>
+                    <ul class="list-circle pr-6">
+                        <li>الخبر غالبًا شبه جملة (جار ومجرور أو ظرف).</li>
+                        <li>يُستخدم للفت الانتباه إلى الخبر.</li>
+                    </ul>
+                </li>
+                <li><strong>الإعراب:</strong> المبتدأ المتأخر مرفوع، والخبر المقدم في محل رفع.</li>
+                <li><strong>الحالات الشائعة:</strong> يحدث مع أفعال ناقصة (مثل كان) أو عندما يكون الخبر ظرفًا أو جار ومجرور.</li>
+            </ul>
+            <h3 class="text-xl font-semibold mb-2">جدول تلخيصي: المبتدأ المتأخر والخبر المقدم</h3>
+            <table>
+                <tr>
+                    <th>العنصر</th>
+                    <th>الوصف</th>
+                    <th>مثال</th>
+                    <th>الإعراب</th>
+                </tr>
+                <tr>
+                    <td>الخبر المقدم</td>
+                    <td>يأتي أولاً، غالبًا شبه جملة</td>
+                    <td>في الغرفةِ</td>
+                    <td>في محل رفع</td>
+                </tr>
+                <tr>
+                    <td>المبتدأ المتأخر</td>
+                    <td>يأتي بعد الخبر</td>
+                    <td>كتابٌ</td>
+                    <td>مرفوع</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8 mb-6">
+            <h2 class="text-2xl font-semibold mb-4">أمثلة توضيحية</h2>
+            <table>
+                <tr>
+                    <th>المثال</th>
+                    <th>الخبر المقدم</th>
+                    <th>المبتدأ المتأخر</th>
+                    <th>الإعراب</th>
+                    <th>ملاحظات</th>
+                </tr>
+                <tr>
+                    <td>في الغرفةِ كتابٌ</td>
+                    <td>في الغرفةِ</td>
+                    <td>كتابٌ</td>
+                    <td>خبر في محل رفع، مبتدأ مرفوع</td>
+                    <td>خبر شبه جملة (جار ومجرور)</td>
+                </tr>
+                <tr>
+                    <td>على الطاولةِ قلمٌ</td>
+                    <td>على الطاولةِ</td>
+                    <td>قلمٌ</td>
+                    <td>خبر في محل رفع، مبتدأ مرفوع</td>
+                    <td>خبر شبه جملة (جار ومجرور)</td>
+                </tr>
+                <tr>
+                    <td>اليومَ امتحانٌ</td>
+                    <td>اليومَ</td>
+                    <td>امتحانٌ</td>
+                    <td>خبر في محل رفع، مبتدأ مرفوع</td>
+                    <td>خبر ظرف زمان</td>
+                </tr>
+                <tr>
+                    <td>كان في الفصلِ طلابٌ</td>
+                    <td>في الفصلِ</td>
+                    <td>طلابٌ</td>
+                    <td>خبر كان في محل رفع، اسم كان مرفوع</td>
+                    <td>مع كان الناقصة</td>
+                </tr>
+                <tr>
+                    <td>هناكَ كتابٌ</td>
+                    <td>هناكَ</td>
+                    <td>كتابٌ</td>
+                    <td>خبر في محل رفع، مبتدأ مرفوع</td>
+                    <td>خبر ظرف مكان</td>
+                </tr>
+                <tr>
+                    <td>ليس في البيتِ أحدٌ</td>
+                    <td>في البيتِ</td>
+                    <td>أحدٌ</td>
+                    <td>خبر ليس في محل رفع، اسم ليس مرفوع</td>
+                    <td>مع ليس الناقصة</td>
+                </tr>
+            </table>
+        </section>
+        <section class="bg-white rounded-lg shadow-lg p-8">
+            <h2 class="text-2xl font-semibold mb-4">أسئلة للتدريب</h2>
+            <table>
+                <tr>
+                    <th>السؤال</th>
+                    <th>الإجابة</th>
+                </tr>
+                <tr>
+                    <td>
+                        ما الخبر المقدم في "في الغرفةِ كتابٌ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. كتابٌ</li>
+                            <li>ب. في الغرفةِ</li>
+                            <li>ج. الغرفةِ</li>
+                            <li>د. لا يوجد</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. في الغرفةِ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        كيف تُعرب "طلابٌ" في "كان في الفصلِ طلابٌ"؟
+                        <ul class="list-disc pr-6">
+                            <li>أ. خبر كان منصوب</li>
+                            <li>ب. اسم كان مرفوع</li>
+                            <li>ج. حال منصوب</li>
+                            <li>د. مبتدأ مجرور</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">ب. اسم كان مرفوع</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>حدد المبتدأ المتأخر والخبر المقدم في "اليومَ امتحانٌ".</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">المبتدأ المتأخر: امتحانٌ، الخبر المقدم: اليومَ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>كون جملة تحتوي على خبر مقدم ظرفي.</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">هناكَ كتابٌ</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>لماذا يُقدم الخبر في بعض الجمل؟</td>
+                    <td>
+                        <button class="show-answer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">إظهار الإجابة</button>
+                        <span class="answer">للفت الانتباه إلى الخبر أو لتناسب السياق البلاغي</span>
+                    </td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    <footer class="bg-gray-800 text-white text-center p-4 mt-6">
+        <p>© 2025 دليل قواعد اللغة العربية</p>
+    </footer>
+    <script src="../js/script.js"></script>
+</body>
+</html>
